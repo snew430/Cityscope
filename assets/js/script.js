@@ -19,20 +19,20 @@ var getEvent = function (x) {
   });
 };
 
-var getCases = function (x) {
-  var covidUrl =
-    "https://api.covid19api.com/total/country/united-states/status/confirmed?from=2022-01-22T23:00:00Z&to=2022-01-23T00:00:00Z";
-  fetch(covidUrl).then(function (response) {
-    response.json().then(function (data) {
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].Province === x) {
-            console.log(data[i])
-        //   return data[i];
-        }
-      }
-    });
-  });
-};
+// var getCases = function (x) {
+//   var covidUrl =
+//     "https://api.covid19api.com/total/country/united-states/status/confirmed?from=2022-01-22T23:00:00Z&to=2022-01-23T00:00:00Z";
+//   fetch(covidUrl).then(function (response) {
+//     response.json().then(function (data) {
+//       for (var i = 0; i < data.length; i++) {
+//         if (data[i].Province === x) {
+//             console.log(data[i])
+//         //   return data[i];
+//         }
+//       }
+//     });
+//   });
+// };
 
 var listEvents = function (data) {
   while (listEl.firstChild) {
@@ -52,7 +52,6 @@ var listEvents = function (data) {
   }
 };
 
-var listCases = function () {};
 
 var eventFormHandler = function (event) {
   event.preventDefault();
