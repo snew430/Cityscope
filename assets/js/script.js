@@ -46,12 +46,26 @@ var listEvents = function (data) {
   while (listEl.firstChild) {
     listEl.removeChild(listEl.firstChild);
   }
-  console.log(data._embedded);
-  // for (var i = 0; i < data._embedded.events.length; i++) {
-  //   var li = document.createElement("div");
-  //   li.textContent = data._embedded.events[i].name
-  //   listEl.appendChild(li);
-  // }
+  if (data._embedded === undefined) {
+    alert("looks like theres no event going on today through ticketmaster");
+  } else {
+    for (var i = 0; i < data._embedded.events.length; i++) {
+      console.log(data._embedded.events[i]);
+
+      var eventInfo = document.createElement("div");
+
+      var eventName = document.createElement("div");
+      eventName.textContent = data._embedded.events[i].name;
+
+      var eventTime = document.createElement("div");
+      eventTime.textContent = data._embedded.events[i].dates.start.localTime;
+
+      eventInfo.appendChild(eventName)
+      eventInfo.appendChild(eventTime)
+
+      listEl.appendChild(eventInfo);
+    }
+  }
 };
 
 var eventFormHandler = function (event) {
