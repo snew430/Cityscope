@@ -50,26 +50,31 @@ var listEvents = function (data) {
     alert("looks like theres no event going on today through ticketmaster");
   } else {
     for (var i = 0; i < data._embedded.events.length; i++) {
-      console.log(data._embedded.events[i].images[0].url);
+      console.log(data._embedded.events[i]);
 
       var eventInfo = document.createElement("div");
 
       var eventName = document.createElement("a");
       eventName.textContent = data._embedded.events[i].name;
-      eventName.setAttribute("href", data._embedded.events[i].url)
-      eventName.setAttribute("target", "_blank")
+      eventName.setAttribute("href", data._embedded.events[i].url);
+      eventName.setAttribute("target", "_blank");
 
-      var eventPic = document.createElement("img")
-      eventPic.setAttribute("src", data._embedded.events[i].images[0].url)
-      eventPic.style.height="50px"
-      eventPic.style.height="50px"
+      var eventPic = document.createElement("img");
+      eventPic.setAttribute("src", data._embedded.events[i].images[0].url);
+      eventPic.style.height = "50px";
+      eventPic.style.height = "50px";
 
       var eventTime = document.createElement("div");
       eventTime.textContent = data._embedded.events[i].dates.start.localTime;
 
-      eventInfo.appendChild(eventName)
-      eventInfo.appendChild(eventTime)
-      eventInfo.appendChild(eventPic)
+      var eventDetails = document.createElement("p");
+      eventDetails.textContent =
+        data._embedded.events[i].classifications[0].segment.name;
+
+      eventInfo.appendChild(eventName);
+      eventInfo.appendChild(eventTime);
+      eventInfo.appendChild(eventPic);
+      eventInfo.appendChild(eventDetails);
 
       listEl.appendChild(eventInfo);
     }
