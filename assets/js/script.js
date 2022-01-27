@@ -58,18 +58,15 @@ function bands() {
     "https://rest.bandsintown.com/artists/ween/events/?app_id=9fd37fb85706620acc6620c7fe4040e8";
   fetch(bandsUrl).then(function (response) {
     response.json().then(function (data) {
-      console.log(data);
+      // console.log(data);
     });
   });
 }
 
-function seatGeek() {
+function seatGeek(location) {
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
-    "https://api.seatgeek.com/2/events?client_id=" +
-    clientId +
-    "&lat=40.7143" +
-    "&lon=-74.006";
+    "https://api.seatgeek.com/2/venues?city=" + location
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
@@ -167,6 +164,7 @@ var eventFormHandler = function (event) {
   if (city) {
     getEvents(city);
     getWeather(city);
+    seatGeek(city)
     keyword.value = "";
   } else {
     alert("!!!!");
