@@ -202,11 +202,12 @@ var weatherIcon = function (id) {
 
 // ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
-  let weatherEl = document.createElement("div");
+
+  // let weatherEl = document.createElement("div");
   var temp = weather.main.temp;
   var icon = weatherIcon(weather.weather[0].id);
-  weatherEl.textContent = temp;
-  weatherContainer.appendChild(weatherEl);
+  // weatherEl.textContent = temp;
+  weatherContainer.textContent= temp
 };
 // ==================================================
 
