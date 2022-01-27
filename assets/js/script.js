@@ -3,7 +3,7 @@ var btn = document.querySelector("#btn");
 var listEl = document.querySelector("#list");
 var formEl = document.querySelector("#keyword-form");
 
-var getEvent = function (x) {
+var getEvents = function (x) {
   var today = moment().format("YYYY-MM-DD");
   var tomorrow = moment().day(2).format("YYYY-MM-DD");
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
@@ -25,6 +25,31 @@ var getEvent = function (x) {
       listEvents(data);
       console.log(data)
     });
+    if (response.ok) {
+      response.json().then(function (data) {
+        listEvents(data);
+      });
+    } else {
+      alert("Sorry, Events could not be found");
+    }
+  });
+};
+
+var getWeather = function (location) {
+  var weatherUrl =
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
+    location +
+    "&units=imperial&appid=8a42d43f7d7dc180da5b1e51890e67dc";
+
+  fetch(weatherUrl).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        // console.log(data);
+        displayWeather(data)
+      });
+    } else {
+      alert("Sorry, Weather could not be found");
+    }
   });
 };
 getEvent("new york");
@@ -47,22 +72,94 @@ var listEvents = function (data) {
   while (listEl.firstChild) {
     listEl.removeChild(listEl.firstChild);
   }
-  console.log(data._embedded);
-  // for (var i = 0; i < data._embedded.events.length; i++) {
-  //   var li = document.createElement("div");
-  //   li.textContent = data._embedded.events[i].name
-  //   listEl.appendChild(li);
-  // }
+  if (data._embedded === undefined) {
+    alert("looks like theres no event going on today through ticketmaster");
+  } else {
+    for (var i = 0; i < data._embedded.events.length; i++) {
+      var eventInfo = document.createElement("div");
+
+      var eventName = document.createElement("a");
+      eventName.textContent = data._embedded.events[i].name;
+      eventName.setAttribute("href", data._embedded.events[i].url);
+      eventName.setAttribute("target", "_blank");
+
+      var eventPic = document.createElement("img");
+      eventPic.setAttribute("src", data._embedded.events[i].images[0].url);
+      eventPic.style.height = "50px";
+      eventPic.style.height = "50px";
+
+      var eventTime = document.createElement("div");
+      eventTime.textContent = data._embedded.events[i].dates.start.localTime;
+
+      var eventDetails = document.createElement("p");
+      eventDetails.textContent =
+        data._embedded.events[i].classifications[0].segment.name;
+
+      eventInfo.appendChild(eventName);
+      eventInfo.appendChild(eventTime);
+      eventInfo.appendChild(eventPic);
+      eventInfo.appendChild(eventDetails);
+
+      listEl.appendChild(eventInfo);
+    }
+  }
 };
+
+var weatherIcon = function (id) {
+
+  // List which icons to use
+
+  var icon;
+  var thunderstorm = "<i class='bi bi-cloud-lightning-rain'></i>";
+  var drizzle = "<i class='bi bi-cloud-drizzle'></i>";
+  var rain = "<i class='bi bi-cloud-rain'></i>";
+  var snow = "<i class='bi bi-snow'></i>";
+  var haze = "<i class='bi bi-cloud-haze'></i>";
+  var clear = "<i class='bi bi-moon-stars'></i>";
+  var clear = "<i class='bi bi-brightness-high'></i>";
+  var cloud = "<i class='bi bi-cloud-moon'></i>";
+  var cloud = "<i class='bi bi-cloud-sun'></i>";
+  var cloudy = "<i class='bi bi-cloud'></i>";
+
+  //   Assign the icon depending on the weather id
+  if (id >= 200 && id < 300) {
+    icon = thunderstorm;
+  } else if (id >= 300 && id < 400) {
+    icon = drizzle;
+  } else if ((id >= 500 && id <= 504) || (id >= 520 && id < 600)) {
+    icon = rain;
+  } else if (id === 511) {
+    icon = snow;
+  } else if (id >= 600 && id < 700) {
+    icon = snow;
+  } else if (id >= 700 && id < 800) {
+    icon = haze;
+  } else if (id === 800) {
+    icon = clear;
+  } else if (id === 801) {
+    icon = cloud;
+  } else if (id >= 802) {
+    icon = cloudy;
+  }
+  return icon;
+};
+
+var displayWeather = function(weather){
+  var temp = weather.main.temp
+  var icon = weatherIcon(weather.weather[0].id)
+  console.log(temp, icon)
+  
+}
 
 var eventFormHandler = function (event) {
   event.preventDefault();
 
-  var key = keyword.value;
-  console.log(key);
+  var city = keyword.value;
+  console.log(city);
 
-  if (key) {
-    getEvent(key);
+  if (city) {
+    getEvents(city);
+    getWeather(city);
     keyword.value = "";
   } else {
     alert("!!!!");
