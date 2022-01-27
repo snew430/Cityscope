@@ -2,6 +2,7 @@ var keyword = document.querySelector("#keyword");
 var btn = document.querySelector("#btn");
 var listEl = document.querySelector("#list");
 var formEl = document.querySelector("#keyword-form");
+var weatherContainer = document.querySelector("#weather")
 
 var getEvents = function (x) {
   var today = moment().format("YYYY-MM-DD");
@@ -151,9 +152,11 @@ var weatherIcon = function (id) {
 };
 
 var displayWeather = function (weather) {
+  let weatherEl = document.createElement("div")
   var temp = weather.main.temp;
   var icon = weatherIcon(weather.weather[0].id);
-  console.log(temp, icon);
+  weatherEl.textContent=temp
+  weatherContainer.appendChild()
 };
 
 var eventFormHandler = function (event) {
