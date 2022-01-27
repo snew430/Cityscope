@@ -1,12 +1,13 @@
 var keyword = document.querySelector("#keyword");
 var btn = document.querySelector("#btn");
-var listEl = document.querySelector("#list");
+var tixEl = document.querySelector("#ticketmaster");
+var seatEl = document.querySelector("#seatgeek");
 var formEl = document.querySelector("#keyword-form");
+var today = moment().format("YYYY-MM-DD");
+var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
+var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
 
 var getEvents = function (x) {
-  var today = moment().format("YYYY-MM-DD");
-  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
-  var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixParam = "?city=";
   var tixDate =
     "&startDateTime=" +
@@ -64,9 +65,11 @@ function bands() {
 }
 
 function seatGeek(location) {
+  var today = moment().format("YYYY-MM-DD");
+  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
-    "https://api.seatgeek.com/2/venues?city=" + location
+    "https://api.seatgeek.com/2/venues?city=" + location + "?client_id=" + clientId
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
@@ -75,8 +78,8 @@ function seatGeek(location) {
 }
 
 var listEvents = function (data) {
-  while (listEl.firstChild) {
-    listEl.removeChild(listEl.firstChild);
+  while (tixEl.firstChild) {
+    tixEl.removeChild(tixEl.firstChild);
   }
   if (data._embedded === undefined) {
     alert("looks like theres no event going on today through ticketmaster");
@@ -107,7 +110,7 @@ var listEvents = function (data) {
       eventInfo.appendChild(eventPic);
       eventInfo.appendChild(eventDetails);
 
-      listEl.appendChild(eventInfo);
+      tixEl.appendChild(eventInfo);
     }
   }
 };
