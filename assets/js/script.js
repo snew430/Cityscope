@@ -5,7 +5,7 @@ var formEl = document.querySelector("#keyword-form");
 
 var getEvents = function (x) {
   var today = moment().format("YYYY-MM-DD");
-  var tomorrow = moment().day(2).format("YYYY-MM-DD");
+  var tomorrow = moment().add(1,"d").format("YYYY-MM-DD");
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixParam = "?city=";
   var tixDate =
@@ -72,6 +72,7 @@ var listEvents = function (data) {
     alert("looks like theres no event going on today through ticketmaster");
   } else {
     for (var i = 0; i < data._embedded.events.length; i++) {
+      console.log(data._embedded.events[i])
       var eventInfo = document.createElement("div");
 
       var eventName = document.createElement("a");
@@ -151,7 +152,6 @@ var eventFormHandler = function (event) {
   event.preventDefault();
 
   var city = keyword.value;
-  console.log(city);
 
   if (city) {
     getEvents(city);
@@ -161,5 +161,18 @@ var eventFormHandler = function (event) {
     alert("!!!!");
   }
 };
+
+function seatGeek(){
+var seatUrl = "https://api.seatgeek.com/2/events?client_id=MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk&lat=40.7143" + "&lon=-74.006"
+fetch(seatUrl).then(function (response) {
+  response.json().then(function (data) {
+    console.log(data);
+    // for(let event of data.event){
+      // console.log(event)
+    // }
+  })
+})
+}
+seatGeek();
 
 formEl.addEventListener("submit", eventFormHandler);
