@@ -4,15 +4,17 @@ var btn = document.querySelector("#btn");
 var tixEl = document.querySelector("#ticketmaster");
 var seatEl = document.querySelector("#seatgeek");
 var formEl = document.querySelector("#city-form");
-var weatherContainer = document.querySelector("#weather")
-var cityTitle = document.querySelector("#city-title")
+var weatherContainer = document.querySelector("#weather");
+var cityTitle = document.querySelector("#city-title");
 
 // Today and tomorrow date using Moment()
 var today = moment().format("YYYY-MM-DD");
 var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
 
+// ==============GET TICKETMASTER INFO===========
 var getTix = function (x) {
   var tixParam = "?city=";
+  var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixDate =
     "&startDateTime=" +
     today +
@@ -25,15 +27,12 @@ var getTix = function (x) {
     x +
     tixApi +
     tixDate;
-  fetch(tixUrl).then(function (response) {
-    response.json().then(function (data) {
-      listTix(data);
-      console.log(data);
-    });
-    if (response.ok) {
-      response.json().then(function (data) {
-        listTix(data);
-      });
+    fetch(tixUrl).then(function (response) {
+      if (response.ok) {
+        response.json().then(function (data) {
+          console.log(data);
+          listTix(data);
+        });
     } else {
       alert("Sorry, Events could not be found");
     }
@@ -64,7 +63,6 @@ var getWeather = function (location) {
 
 // ====================Get BandsInTown ==================
 
-
 function bands() {
   var bandsUrl =
     "https://rest.bandsintown.com/artists/ween/events/?app_id=9fd37fb85706620acc6620c7fe4040e8";
@@ -79,11 +77,12 @@ function bands() {
 // =================Get SeatGeek Events ================
 
 function getSeat(location) {
-  var today = moment().format("YYYY-MM-DD");
-  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
-    "https://api.seatgeek.com/2/events?venue.city=" + location + "&client_id=" + clientId
+    "https://api.seatgeek.com/2/events?venue.city=" +
+    location +
+    "&client_id=" +
+    clientId;
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
@@ -96,6 +95,7 @@ function getSeat(location) {
 // ==========List TicketMaster Events===========
 
 var listTix = function (data) {
+  console.log(data);
   while (tixEl.firstChild) {
     tixEl.removeChild(tixEl.firstChild);
   }
@@ -132,28 +132,41 @@ var listTix = function (data) {
     }
   }
 };
-var listSeat = function(data){
+// ==============================================
+
+// =============Get SEATGEEK Info=================
+
+var listSeat = function (data) {
   while (seatEl.firstChild) {
     seatEl.removeChild(tixEl.firstChild);
   }
-  for(var i=0; i < 10; i++){
-    var eventName = document.createElement("a")
+  for (var i = 0; i < 10; i++) {
+    var wrapper = document.getElementById("seatgeek")
+    var eventName = document.createElement("a");
     eventName.textContent = data.events[i].title;
     eventName.setAttribute("href", data.events[i].url);
-    eventName.setAttribute("target", "_blank")
+    eventName.setAttribute("target", "_blank");
 
     var eventTime = document.createElement("div");
     eventTime.textContent = data.events[i].datetime_local;
 
+    if(data.events[i].stats.lowest_price){
     var priceRange = document.createElement("div");
-    var minPrice = data.events[i].stats.lowest_price
-    var maxPrice = data.events[i].stats.highest_price
-    priceRange.textContent = "Price: $" + minPrice + "-" + maxPrice
-
+    var minPrice = data.events[i].stats.lowest_price;
+    var maxPrice = data.events[i].stats.highest_price;
+    priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
+    }
     var venue = document.createElement("div");
     venue.textContent = data.events[i].venue.name;
+
+    wrapper.appendChild(eventName);
+    wrapper.appendChild(eventTime);
+    if(priceRange){
+    wrapper.appendChild(priceRange);
+    }
+    wrapper.appendChild(venue);
   }
-}
+};
 // ==================================================
 
 // ========Which Weather Icon to Use==============
@@ -198,11 +211,11 @@ var weatherIcon = function (id) {
 
 // ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
-  let weatherEl = document.createElement("div")
+  let weatherEl = document.createElement("div");
   var temp = weather.main.temp;
   var icon = weatherIcon(weather.weather[0].id);
-  weatherEl.textContent=temp
-  weatherContainer.appendChild(weather)
+  weatherEl.textContent = temp;
+  weatherContainer.appendChild(weatherEl);
 };
 // ==================================================
 
@@ -223,6 +236,5 @@ var eventFormHandler = function (event) {
   }
 };
 // ==================================================
-
 
 formEl.addEventListener("submit", eventFormHandler);
