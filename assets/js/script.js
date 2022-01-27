@@ -21,6 +21,10 @@ var getEvents = function (x) {
     tixApi +
     tixDate;
   fetch(tixUrl).then(function (response) {
+    response.json().then(function (data) {
+      listEvents(data);
+      console.log(data)
+    });
     if (response.ok) {
       response.json().then(function (data) {
         listEvents(data);
@@ -48,7 +52,7 @@ var getWeather = function (location) {
     }
   });
 };
-
+getEvent("new york");
 // var getCases = function (x) {
 //   var covidUrl =
 //     "https://api.covid19api.com/total/country/united-states/status/confirmed?from=2022-01-22T23:00:00Z&to=2022-01-23T00:00:00Z";
@@ -161,5 +165,25 @@ var eventFormHandler = function (event) {
     alert("!!!!");
   }
 };
+var clientId =  "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk"
+var secret = "19613d779daf9ddb91c3d61527dea8a2db95015a8f78e369a9bb7ab684828a1e"
 
-formEl.addEventListener("submit", eventFormHandler);
+function seatGeek(){
+var seatUrl = "https://api.seatgeek.com/2/events?client_id=" + clientId + "&lat=40.7143" + "&lon=-74.006" 
+fetch(seatUrl).then(function (response) {
+  response.json().then(function (data) {
+    console.log(data);
+  })
+})
+}
+seatGeek();
+
+function bands(){
+var bandsUrl = "https://rest.bandsintown.com/artists/ween/events/?app_id=9fd37fb85706620acc6620c7fe4040e8"
+fetch(bandsUrl).then(function (response) {
+  response.json().then(function(data){
+    console.log(data[2]);
+  })
+})
+}
+bands();
