@@ -1,11 +1,18 @@
-var keyword = document.querySelector("#keyword");
+// Document Elements
+var city = document.querySelector("#city");
 var btn = document.querySelector("#btn");
-var listEl = document.querySelector("#list");
-var formEl = document.querySelector("#keyword-form");
+var tixEl = document.querySelector("#ticketmaster");
+var seatEl = document.querySelector("#seatgeek");
+var formEl = document.querySelector("#city-form");
+var weatherContainer = document.querySelector("#weather")
+var cityTitle = document.querySelector("#city-title")
 
-var getEvents = function (x) {
-  var today = moment().format("YYYY-MM-DD");
-  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
+// Today and tomorrow date using Moment()
+var today = moment().format("YYYY-MM-DD");
+var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
+
+// ==========Get Ticketmaster events============
+var getTix = function (x) {
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixParam = "?city=";
   var tixDate =
@@ -22,18 +29,21 @@ var getEvents = function (x) {
     tixDate;
   fetch(tixUrl).then(function (response) {
     response.json().then(function (data) {
-      listEvents(data);
+      listTix(data);
       console.log(data);
     });
     if (response.ok) {
       response.json().then(function (data) {
-        listEvents(data);
+        listTix(data);
       });
     } else {
       alert("Sorry, Events could not be found");
     }
   });
 };
+// ==================================================
+
+// ====================Get Weather ==================
 
 var getWeather = function (location) {
   var weatherUrl =
@@ -52,6 +62,10 @@ var getWeather = function (location) {
     }
   });
 };
+// ==================================================
+
+// ====================Get BandsInTown ==================
+
 
 function bands() {
   var bandsUrl =
@@ -62,21 +76,28 @@ function bands() {
     });
   });
 }
+// ==================================================
+
+// =================Get SeatGeek Events ================
 
 function seatGeek(location) {
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
-    "https://api.seatgeek.com/2/venues?city=" + location
+    "https://api.seatgeek.com/2/events?venue.city=" + location + "&client_id=" + clientId
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
+      listSeat(data);
     });
   });
 }
+// ==================================================
 
-var listEvents = function (data) {
-  while (listEl.firstChild) {
-    listEl.removeChild(listEl.firstChild);
+// ==========List TicketMaster Events===========
+
+var listTix = function (data) {
+  while (tixEl.firstChild) {
+    tixEl.removeChild(tixEl.firstChild);
   }
   if (data._embedded === undefined) {
     alert("looks like theres no event going on today through ticketmaster");
@@ -107,11 +128,13 @@ var listEvents = function (data) {
       eventInfo.appendChild(eventPic);
       eventInfo.appendChild(eventDetails);
 
-      listEl.appendChild(eventInfo);
+      tixEl.appendChild(eventInfo);
     }
   }
 };
+// ==================================================
 
+// ========Which Weather Icon to Use==============
 var weatherIcon = function (id) {
   // List which icons to use
 
@@ -149,26 +172,35 @@ var weatherIcon = function (id) {
   }
   return icon;
 };
+// ==================================================
 
+// ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
+  let weatherEl = document.createElement("div")
   var temp = weather.main.temp;
   var icon = weatherIcon(weather.weather[0].id);
-  console.log(temp, icon);
+  weatherEl.textContent=temp
+  weatherContainer.appendChild(weather)
 };
+// ==================================================
 
+// =================Get Info From Form Input===========
 var eventFormHandler = function (event) {
   event.preventDefault();
 
-  var city = keyword.value;
+  var location = city.value;
 
-  if (city) {
-    getEvents(city);
-    getWeather(city);
-    seatGeek(city)
-    keyword.value = "";
+  if (location) {
+    cityTitle.textContent=location.toUpperCase()
+    getTix(location);
+    getWeather(location);
+    seatGeek(location)
+    city.value = "";
   } else {
     alert("!!!!");
   }
 };
+// ==================================================
+
 
 formEl.addEventListener("submit", eventFormHandler);
