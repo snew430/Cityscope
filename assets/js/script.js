@@ -151,12 +151,12 @@ var listSeat = function (data) {
     eventName.textContent = data.events[i].title;
     eventName.setAttribute("href", data.events[i].url);
     eventName.setAttribute("target", "_blank");
-    
+
     var venue = document.createElement("div");
     venue.textContent = data.events[i].venue.name;
 
     var eventTime = document.createElement("div");
-    eventTime.textContent = data.events[i].datetime_local;
+    eventTime.textContent = moment(data.events[i].datetime_local).format('h:mm a');
 
     if(data.events[i].stats.lowest_price){
     var priceRange = document.createElement("div");
@@ -166,11 +166,11 @@ var listSeat = function (data) {
     }
 
     wrapper.appendChild(eventName);
+    wrapper.appendChild(venue);
     wrapper.appendChild(eventTime);
     if(priceRange){
     wrapper.appendChild(priceRange);
     }
-    wrapper.appendChild(venue);
     seatEl.appendChild(wrapper)
   }
 };
