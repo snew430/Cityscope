@@ -11,13 +11,7 @@ var cityTitle = document.querySelector("#city-title")
 var today = moment().format("YYYY-MM-DD");
 var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
 
-<<<<<<< HEAD
 var getTix = function (x) {
-=======
-// ==========Get Ticketmaster events============
-var getEvents = function (x) {
-  var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
->>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
   var tixParam = "?city=";
   var tixDate =
     "&startDateTime=" +
@@ -84,13 +78,9 @@ function bands() {
 
 // =================Get SeatGeek Events ================
 
-<<<<<<< HEAD
 function getSeat(location) {
   var today = moment().format("YYYY-MM-DD");
   var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
-=======
-function seatGeek(location) {
->>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
     "https://api.seatgeek.com/2/events?venue.city=" + location + "&client_id=" + clientId
@@ -142,7 +132,6 @@ var listTix = function (data) {
     }
   }
 };
-<<<<<<< HEAD
 var listSeat = function(data){
   while (seatEl.firstChild) {
     seatEl.removeChild(tixEl.firstChild);
@@ -165,11 +154,9 @@ var listSeat = function(data){
     venue.textContent = data.events[i].venue.name;
   }
 }
-=======
 // ==================================================
 
 // ========Which Weather Icon to Use==============
->>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
 var weatherIcon = function (id) {
   // List which icons to use
 
@@ -225,20 +212,12 @@ var eventFormHandler = function (event) {
 
   var location = city.value;
 
-<<<<<<< HEAD
-  if (city) {
-    getTix(city);
-    getWeather(city);
-    getSeat(city)
-    keyword.value = "";
-=======
   if (location) {
     cityTitle.textContent=location.toUpperCase()
     getEvents(location);
     getWeather(location);
     seatGeek(location)
     city.value = "";
->>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
   } else {
     alert("!!!!");
   }
