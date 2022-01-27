@@ -69,7 +69,7 @@ function seatGeek(location) {
   var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
-    "https://api.seatgeek.com/2/venues?city=" + location + "?client_id=" + clientId
+    "https://api.seatgeek.com/2/events?venue.city=" + location + "&client_id=" + clientId
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
