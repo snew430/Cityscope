@@ -4,15 +4,22 @@ var listEl = document.querySelector("#list");
 var formEl = document.querySelector("#keyword-form");
 
 var getEvent = function (x) {
-  console.log(new Date)
+  var today = moment().format("YYYY-MM-DD");
+  var tomorrow = moment().day(2).format("YYYY-MM-DD");
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
-  var tixParam = "?keyword=";
-  var tixDate = "&locale=*&startDateTime=2022-01-24T00:01:00Z&endDateTime=2022-01-24T13:59:00Z";
+  var tixParam = "?city=";
+  var tixDate =
+    "&startDateTime=" +
+    today +
+    "T00:01:00Z&endDateTime=" +
+    tomorrow +
+    "T01:00:00Z";
   var tixUrl =
     "https://app.ticketmaster.com/discovery/v2/events.json" +
     tixParam +
     x +
-    tixApi+tixDate;
+    tixApi +
+    tixDate;
   fetch(tixUrl).then(function (response) {
     response.json().then(function (data) {
       listEvents(data);
@@ -39,11 +46,12 @@ var listEvents = function (data) {
   while (listEl.firstChild) {
     listEl.removeChild(listEl.firstChild);
   }
-  for (var i = 0; i < data._embedded.events.length; i++) {
-    var li = document.createElement("div");
-    li.textContent = data._embedded.events[i].name
-    listEl.appendChild(li);
-  }
+  console.log(data._embedded);
+  // for (var i = 0; i < data._embedded.events.length; i++) {
+  //   var li = document.createElement("div");
+  //   li.textContent = data._embedded.events[i].name
+  //   listEl.appendChild(li);
+  // }
 };
 
 var eventFormHandler = function (event) {
@@ -61,5 +69,3 @@ var eventFormHandler = function (event) {
 };
 
 formEl.addEventListener("submit", eventFormHandler);
-
-getEvent("atlanta");
