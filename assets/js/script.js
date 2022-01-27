@@ -1,13 +1,23 @@
-var keyword = document.querySelector("#keyword");
+// Document Elements
+var city = document.querySelector("#city");
 var btn = document.querySelector("#btn");
 var tixEl = document.querySelector("#ticketmaster");
 var seatEl = document.querySelector("#seatgeek");
-var formEl = document.querySelector("#keyword-form");
+var formEl = document.querySelector("#city-form");
+var weatherContainer = document.querySelector("#weather")
+var cityTitle = document.querySelector("#city-title")
+
+// Today and tomorrow date using Moment()
 var today = moment().format("YYYY-MM-DD");
 var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
-var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
 
+<<<<<<< HEAD
 var getTix = function (x) {
+=======
+// ==========Get Ticketmaster events============
+var getEvents = function (x) {
+  var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
+>>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
   var tixParam = "?city=";
   var tixDate =
     "&startDateTime=" +
@@ -35,6 +45,9 @@ var getTix = function (x) {
     }
   });
 };
+// ==================================================
+
+// ====================Get Weather ==================
 
 var getWeather = function (location) {
   var weatherUrl =
@@ -53,6 +66,10 @@ var getWeather = function (location) {
     }
   });
 };
+// ==================================================
+
+// ====================Get BandsInTown ==================
+
 
 function bands() {
   var bandsUrl =
@@ -63,10 +80,17 @@ function bands() {
     });
   });
 }
+// ==================================================
 
+// =================Get SeatGeek Events ================
+
+<<<<<<< HEAD
 function getSeat(location) {
   var today = moment().format("YYYY-MM-DD");
   var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
+=======
+function seatGeek(location) {
+>>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
     "https://api.seatgeek.com/2/events?venue.city=" + location + "&client_id=" + clientId
@@ -77,6 +101,9 @@ function getSeat(location) {
     });
   });
 }
+// ==================================================
+
+// ==========List TicketMaster Events===========
 
 var listTix = function (data) {
   while (tixEl.firstChild) {
@@ -115,6 +142,7 @@ var listTix = function (data) {
     }
   }
 };
+<<<<<<< HEAD
 var listSeat = function(data){
   while (seatEl.firstChild) {
     seatEl.removeChild(tixEl.firstChild);
@@ -137,6 +165,11 @@ var listSeat = function(data){
     venue.textContent = data.events[i].venue.name;
   }
 }
+=======
+// ==================================================
+
+// ========Which Weather Icon to Use==============
+>>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
 var weatherIcon = function (id) {
   // List which icons to use
 
@@ -174,26 +207,43 @@ var weatherIcon = function (id) {
   }
   return icon;
 };
+// ==================================================
 
+// ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
+  let weatherEl = document.createElement("div")
   var temp = weather.main.temp;
   var icon = weatherIcon(weather.weather[0].id);
-  console.log(temp, icon);
+  weatherEl.textContent=temp
+  weatherContainer.appendChild(weather)
 };
+// ==================================================
 
+// =================Get Info From Form Input===========
 var eventFormHandler = function (event) {
   event.preventDefault();
 
-  var city = keyword.value;
+  var location = city.value;
 
+<<<<<<< HEAD
   if (city) {
     getTix(city);
     getWeather(city);
     getSeat(city)
     keyword.value = "";
+=======
+  if (location) {
+    cityTitle.textContent=location.toUpperCase()
+    getEvents(location);
+    getWeather(location);
+    seatGeek(location)
+    city.value = "";
+>>>>>>> 3c4d9b239dd6d31f5dfceae8222fac6fe4e34e5a
   } else {
     alert("!!!!");
   }
 };
+// ==================================================
+
 
 formEl.addEventListener("submit", eventFormHandler);
