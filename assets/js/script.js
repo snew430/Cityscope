@@ -11,9 +11,7 @@ var cityTitle = document.querySelector("#city-title")
 var today = moment().format("YYYY-MM-DD");
 var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
 
-// ==========Get Ticketmaster events============
-var getEvents = function (x) {
-  var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
+var getTix = function (x) {
   var tixParam = "?city=";
   var tixDate =
     "&startDateTime=" +
@@ -29,12 +27,12 @@ var getEvents = function (x) {
     tixDate;
   fetch(tixUrl).then(function (response) {
     response.json().then(function (data) {
-      listEvents(data);
+      listTix(data);
       console.log(data);
     });
     if (response.ok) {
       response.json().then(function (data) {
-        listEvents(data);
+        listTix(data);
       });
     } else {
       alert("Sorry, Events could not be found");
@@ -80,13 +78,16 @@ function bands() {
 
 // =================Get SeatGeek Events ================
 
-function seatGeek(location) {
+function getSeat(location) {
+  var today = moment().format("YYYY-MM-DD");
+  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
-    "https://api.seatgeek.com/2/venues?city=" + location + "?client_id=" + clientId
+    "https://api.seatgeek.com/2/events?venue.city=" + location + "&client_id=" + clientId
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
       console.log(data);
+      listSeat(data);
     });
   });
 }
@@ -94,7 +95,7 @@ function seatGeek(location) {
 
 // ==========List TicketMaster Events===========
 
-var listEvents = function (data) {
+var listTix = function (data) {
   while (tixEl.firstChild) {
     tixEl.removeChild(tixEl.firstChild);
   }
@@ -131,6 +132,28 @@ var listEvents = function (data) {
     }
   }
 };
+var listSeat = function(data){
+  while (seatEl.firstChild) {
+    seatEl.removeChild(tixEl.firstChild);
+  }
+  for(var i=0; i < 10; i++){
+    var eventName = document.createElement("a")
+    eventName.textContent = data.events[i].title;
+    eventName.setAttribute("href", data.events[i].url);
+    eventName.setAttribute("target", "_blank")
+
+    var eventTime = document.createElement("div");
+    eventTime.textContent = data.events[i].datetime_local;
+
+    var priceRange = document.createElement("div");
+    var minPrice = data.events[i].stats.lowest_price
+    var maxPrice = data.events[i].stats.highest_price
+    priceRange.textContent = "Price: $" + minPrice + "-" + maxPrice
+
+    var venue = document.createElement("div");
+    venue.textContent = data.events[i].venue.name;
+  }
+}
 // ==================================================
 
 // ========Which Weather Icon to Use==============
