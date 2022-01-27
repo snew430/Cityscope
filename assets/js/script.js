@@ -5,7 +5,7 @@ var formEl = document.querySelector("#keyword-form");
 
 var getEvents = function (x) {
   var today = moment().format("YYYY-MM-DD");
-  var tomorrow = moment().add(1,"d").format("YYYY-MM-DD");
+  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixParam = "?city=";
   var tixDate =
@@ -21,6 +21,10 @@ var getEvents = function (x) {
     tixApi +
     tixDate;
   fetch(tixUrl).then(function (response) {
+    response.json().then(function (data) {
+      listEvents(data);
+      console.log(data);
+    });
     if (response.ok) {
       response.json().then(function (data) {
         listEvents(data);
@@ -40,8 +44,8 @@ var getWeather = function (location) {
   fetch(weatherUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        // console.log(data);
-        displayWeather(data)
+        console.log(data);
+        displayWeather(data);
       });
     } else {
       alert("Sorry, Weather could not be found");
@@ -49,20 +53,29 @@ var getWeather = function (location) {
   });
 };
 
-// var getCases = function (x) {
-//   var covidUrl =
-//     "https://api.covid19api.com/total/country/united-states/status/confirmed?from=2022-01-22T23:00:00Z&to=2022-01-23T00:00:00Z";
-//   fetch(covidUrl).then(function (response) {
-//     response.json().then(function (data) {
-//       for (var i = 0; i < data.length; i++) {
-//         if (data[i].Province === x) {
-//             console.log(data[i])
-//         //   return data[i];
-//         }
-//       }
-//     });
-//   });
-// };
+function bands() {
+  var bandsUrl =
+    "https://rest.bandsintown.com/artists/ween/events/?app_id=9fd37fb85706620acc6620c7fe4040e8";
+  fetch(bandsUrl).then(function (response) {
+    response.json().then(function (data) {
+      console.log(data);
+    });
+  });
+}
+
+function seatGeek() {
+  var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
+  var seatUrl =
+    "https://api.seatgeek.com/2/events?client_id=" +
+    clientId +
+    "&lat=40.7143" +
+    "&lon=-74.006";
+  fetch(seatUrl).then(function (response) {
+    response.json().then(function (data) {
+      console.log(data);
+    });
+  });
+}
 
 var listEvents = function (data) {
   while (listEl.firstChild) {
@@ -72,7 +85,7 @@ var listEvents = function (data) {
     alert("looks like theres no event going on today through ticketmaster");
   } else {
     for (var i = 0; i < data._embedded.events.length; i++) {
-      console.log(data._embedded.events[i])
+      console.log(data._embedded.events[i]);
       var eventInfo = document.createElement("div");
 
       var eventName = document.createElement("a");
@@ -103,7 +116,6 @@ var listEvents = function (data) {
 };
 
 var weatherIcon = function (id) {
-
   // List which icons to use
 
   var icon;
@@ -141,12 +153,11 @@ var weatherIcon = function (id) {
   return icon;
 };
 
-var displayWeather = function(weather){
-  var temp = weather.main.temp
-  var icon = weatherIcon(weather.weather[0].id)
-  console.log(temp, icon)
-  
-}
+var displayWeather = function (weather) {
+  var temp = weather.main.temp;
+  var icon = weatherIcon(weather.weather[0].id);
+  console.log(temp, icon);
+};
 
 var eventFormHandler = function (event) {
   event.preventDefault();
@@ -161,18 +172,5 @@ var eventFormHandler = function (event) {
     alert("!!!!");
   }
 };
-
-function seatGeek(){
-var seatUrl = "https://api.seatgeek.com/2/events?client_id=MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk&lat=40.7143" + "&lon=-74.006"
-fetch(seatUrl).then(function (response) {
-  response.json().then(function (data) {
-    console.log(data);
-    // for(let event of data.event){
-      // console.log(event)
-    // }
-  })
-})
-}
-seatGeek();
 
 formEl.addEventListener("submit", eventFormHandler);
