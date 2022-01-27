@@ -214,9 +214,9 @@ var eventFormHandler = function (event) {
 
   if (location) {
     cityTitle.textContent=location.toUpperCase()
-    getEvents(location);
+    getTix(location);
     getWeather(location);
-    seatGeek(location)
+    getSeat(location)
     city.value = "";
   } else {
     alert("!!!!");
