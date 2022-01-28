@@ -141,21 +141,37 @@ var listSeat = function (data) {
     seatEl.removeChild(tixEl.firstChild);
   }
   for (var i = 0; i < 10; i++) {
+    var wrapper = document.createElement("div")
+    if(i % 2 === 0){
+      wrapper.className = "seatEven"
+    } else {
+      wrapper.className = "seatOdd"
+    }
     var eventName = document.createElement("a");
     eventName.textContent = data.events[i].title;
     eventName.setAttribute("href", data.events[i].url);
     eventName.setAttribute("target", "_blank");
 
-    var eventTime = document.createElement("div");
-    eventTime.textContent = data.events[i].datetime_local;
+    var venue = document.createElement("div");
+    venue.textContent = data.events[i].venue.name;
 
+    var eventTime = document.createElement("div");
+    eventTime.textContent = moment(data.events[i].datetime_local).format('h:mm a');
+
+    if(data.events[i].stats.lowest_price){
     var priceRange = document.createElement("div");
     var minPrice = data.events[i].stats.lowest_price;
     var maxPrice = data.events[i].stats.highest_price;
-    priceRange.textContent = "Price: $" + minPrice + "-" + maxPrice;
+    priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
+    }
 
-    var venue = document.createElement("div");
-    venue.textContent = data.events[i].venue.name;
+    wrapper.appendChild(eventName);
+    wrapper.appendChild(venue);
+    wrapper.appendChild(eventTime);
+    if(priceRange){
+    wrapper.appendChild(priceRange);
+    }
+    seatEl.appendChild(wrapper)
   }
 };
 // ==================================================
@@ -218,10 +234,10 @@ var eventFormHandler = function (event) {
   var location = city.value;
 
   if (location) {
-    cityTitle.textContent = location.toUpperCase();
+    cityTitle.textContent=location.toUpperCase()
     getTix(location);
     getWeather(location);
-    // seatGeek(location)
+    getSeat(location)
     city.value = "";
   } else {
     alert("!!!!");
