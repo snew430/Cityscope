@@ -7,12 +7,12 @@ var formEl = document.querySelector("#city-form");
 var weatherContainer = document.querySelector("#weather");
 var cityTitle = document.querySelector("#city-title");
 
-// Today and tomorrow date using Moment()
-var today = moment().format("YYYY-MM-DD");
-var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
+let cityToSave = [];
 
 // ==============GET TICKETMASTER INFO===========
 var getTix = function (x) {
+  var today = moment().format("YYYY-MM-DD");
+  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
   var tixParam = "?city=";
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixDate =
@@ -30,7 +30,6 @@ var getTix = function (x) {
   fetch(tixUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data);
         listTix(data);
       });
     } else {
@@ -51,7 +50,6 @@ var getWeather = function (location) {
   fetch(weatherUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        console.log(data);
         displayWeather(data);
       });
     } else {
@@ -67,9 +65,7 @@ function bands() {
   var bandsUrl =
     "https://rest.bandsintown.com/artists/ween/events/?app_id=9fd37fb85706620acc6620c7fe4040e8";
   fetch(bandsUrl).then(function (response) {
-    response.json().then(function (data) {
-      // console.log(data);
-    });
+    response.json().then(function (data) {});
   });
 }
 // ==================================================
@@ -85,7 +81,6 @@ function getSeat(location) {
     clientId;
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
-      console.log(data);
       listSeat(data);
     });
   });
@@ -95,7 +90,6 @@ function getSeat(location) {
 // ==========List TicketMaster Events===========
 
 var listTix = function (data) {
-  console.log(data);
   while (tixEl.firstChild) {
     tixEl.removeChild(tixEl.firstChild);
   }
@@ -108,7 +102,7 @@ var listTix = function (data) {
       tixRow.classList = "row";
 
       let tixCol = document.createElement("div");
-      tixCol.classList = "col s6 m17";
+      tixCol.classList = "col s6 l3 m17";
 
       let tixCard = document.createElement("div");
       tixCard.classList = "card small";
@@ -123,7 +117,9 @@ var listTix = function (data) {
       // Get Time of event
       let tixCardImageText = document.createElement("span");
       tixCardImageText.classList = "card-title";
-      let amPM = parseInt(data._embedded.events[i].dates.start.localTime.slice(0, 2));
+      let amPM = parseInt(
+        data._embedded.events[i].dates.start.localTime.slice(0, 2)
+      );
       let end;
       if (amPM > 12) {
         amPM = amPM - 12;
@@ -134,7 +130,8 @@ var listTix = function (data) {
       if (amPM === 0) {
         amPM = 12;
       }
-      tixCardImageText.textContent = amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
+      tixCardImageText.textContent =
+        amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
 
       // Append both card image and time
       tixCardImage.appendChild(tixImage);
@@ -176,7 +173,7 @@ var listTix = function (data) {
 
 var listSeat = function (data) {
   while (seatEl.firstChild) {
-    seatEl.removeChild(tixEl.firstChild);
+    seatEl.removeChild(seatEl.firstChild);
   }
   for (var i = 0; i < 10; i++) {
     var wrapper = document.createElement("div");
@@ -211,6 +208,7 @@ var listSeat = function (data) {
     if (priceRange) {
       wrapper.appendChild(priceRange);
     }
+
     seatEl.appendChild(wrapper);
   }
 };
@@ -258,20 +256,49 @@ var weatherIcon = function (id) {
 
 // ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
-  // let weatherEl = document.createElement("div");
-  var temp = weather.main.temp;
+  var temp = weather.main.temp + "\xB0 F";
   var icon = weatherIcon(weather.weather[0].id);
-  // weatherEl.textContent = temp;
   weatherContainer.textContent = temp;
 };
+// ==================================================
+
+// =================Save City Info===========
+function saveCity(location) {
+  cityToSave = [];
+  let currentDay = moment().format("MMDD");
+  cityToSave.push(location);
+  cityToSave.push(currentDay);
+
+  console.log(cityToSave);
+
+  localStorage.setItem("city", JSON.stringify(cityToSave));
+}
+// ==================================================
+
+// =============LOAD CITY INFO===================
+
+function loadCity() {
+  cityToSave = JSON.parse(localStorage.getItem("city"));
+
+  if (!cityToSave) {
+    cityToSave = [];
+  } else if (cityToSave[1] !== moment().format("MMDD")) {
+    alert("its a different day");
+  } else {
+    cityTitle.textContent = cityToSave[0].toUpperCase();
+    getTix(cityToSave[0]);
+    getWeather(cityToSave[0]);
+    getSeat(cityToSave[0]);
+  }
+}
 // ==================================================
 
 // =================Get Info From Form Input===========
 var eventFormHandler = function (event) {
   event.preventDefault();
 
-  loader(tixEl)
-  loader(seatEl)
+  loader(tixEl);
+  loader(seatEl);
 
   var location = city.value;
 
@@ -280,6 +307,7 @@ var eventFormHandler = function (event) {
     getTix(location);
     getWeather(location);
     getSeat(location);
+    saveCity(location);
     city.value = "";
   } else {
     alert("!!!!");
@@ -289,38 +317,38 @@ var eventFormHandler = function (event) {
 
 // ===================LOADER=======================
 
-function loader(appendWhere){
+function loader(appendWhere) {
+  let preloader = document.createElement("div");
+  preloader.classList = "preloader-wrapper big active";
 
-  let preloader =document.createElement("div")
-  preloader.classList ="preloader-wrapper big active"
+  let spinner = document.createElement("div");
+  spinner.classList = "spinner-layer spinner-blue-only";
 
-  let spinner= document.createElement("div")
-  spinner.classList = "spinner-layer spinner-blue-only"
+  let circleClipperLeft = document.createElement("div");
+  circleClipperLeft.classList = "circle-clipper left";
 
-  let circleClipperLeft =document.createElement("div")
-  circleClipperLeft.classList="circle-clipper left"
+  let gap = document.createElement("div");
+  gap.classList = "gap-patch";
 
-  let gap = document.createElement("div")
-  gap.classList="gap-patch"
+  let circleClipperRight = document.createElement("div");
+  circleClipperRight.classList = "circle-clipper right";
 
-  let circleClipperRight =document.createElement("div")
-  circleClipperRight.classList="circle-clipper right"
+  let circle = document.createElement("div");
+  circle.classList = "circle";
 
-  let circle = document.createElement("div")
-  circle.classList="circle"
+  circleClipperLeft.appendChild(circle);
+  gap.appendChild(circle);
+  circleClipperRight.appendChild(circle);
 
-  circleClipperLeft.appendChild(circle)
-  gap.appendChild(circle)
-  circleClipperRight.appendChild(circle)
+  spinner.appendChild(circleClipperLeft);
+  spinner.appendChild(gap);
+  spinner.appendChild(circleClipperRight);
 
-  spinner.appendChild(circleClipperLeft)
-  spinner.appendChild(gap)
-  spinner.appendChild(circleClipperRight)
+  preloader.appendChild(spinner);
 
-  preloader.appendChild(spinner)
-
-  appendWhere.appendChild(preloader)
-
+  appendWhere.appendChild(preloader);
 }
+// =======================================================
 
+loadCity();
 formEl.addEventListener("submit", eventFormHandler);
