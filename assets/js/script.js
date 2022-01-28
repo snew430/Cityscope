@@ -95,7 +95,6 @@ function getSeat(location) {
 // ==========List TicketMaster Events===========
 
 var listTix = function (data) {
-  console.log(data);
   while (tixEl.firstChild) {
     tixEl.removeChild(tixEl.firstChild);
   }
@@ -212,6 +211,7 @@ var listSeat = function (data) {
       wrapper.appendChild(priceRange);
     }
     seatEl.appendChild(wrapper);
+    console.log(seatEl)
   }
 };
 // ==================================================
@@ -277,9 +277,9 @@ var eventFormHandler = function (event) {
 
   if (location) {
     cityTitle.textContent = location.toUpperCase();
+    getSeat(location);
     getTix(location);
     getWeather(location);
-    getSeat(location);
     city.value = "";
   } else {
     alert("!!!!");
