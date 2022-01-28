@@ -210,6 +210,7 @@ var listSeat = function (data) {
     }
 
     seatEl.appendChild(wrapper);
+    console.log(seatEl)
   }
 };
 // ==================================================
