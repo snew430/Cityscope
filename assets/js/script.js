@@ -27,12 +27,12 @@ var getTix = function (x) {
     x +
     tixApi +
     tixDate;
-    fetch(tixUrl).then(function (response) {
-      if (response.ok) {
-        response.json().then(function (data) {
-          console.log(data);
-          listTix(data);
-        });
+  fetch(tixUrl).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        console.log(data);
+        listTix(data);
+      });
     } else {
       alert("Sorry, Events could not be found");
     }
@@ -103,32 +103,70 @@ var listTix = function (data) {
     alert("looks like theres no event going on today through ticketmaster");
   } else {
     for (var i = 0; i < data._embedded.events.length; i++) {
-      console.log(data._embedded.events[i]);
-      var eventInfo = document.createElement("div");
+      // Create Divs for Cards
+      let tixRow = document.createElement("div");
+      tixRow.classList = "row";
 
-      var eventName = document.createElement("a");
-      eventName.textContent = data._embedded.events[i].name;
-      eventName.setAttribute("href", data._embedded.events[i].url);
-      eventName.setAttribute("target", "_blank");
+      let tixCol = document.createElement("div");
+      tixCol.classList = "col s6 m17";
 
-      var eventPic = document.createElement("img");
-      eventPic.setAttribute("src", data._embedded.events[i].images[0].url);
-      eventPic.style.height = "50px";
-      eventPic.style.height = "50px";
+      let tixCard = document.createElement("div");
+      tixCard.classList = "card small";
 
-      var eventTime = document.createElement("div");
-      eventTime.textContent = data._embedded.events[i].dates.start.localTime;
+      let tixCardImage = document.createElement("div");
+      tixCardImage.classList = "card-image";
 
-      var eventDetails = document.createElement("p");
-      eventDetails.textContent =
-        data._embedded.events[i].classifications[0].segment.name;
+      // Get Card Image
+      let tixImage = document.createElement("img");
+      tixImage.setAttribute("src", data._embedded.events[i].images[0].url);
 
-      eventInfo.appendChild(eventName);
-      eventInfo.appendChild(eventTime);
-      eventInfo.appendChild(eventPic);
-      eventInfo.appendChild(eventDetails);
+      // Get Time of event
+      let tixCardImageText = document.createElement("span");
+      tixCardImageText.classList = "card-title";
+      let amPM = parseInt(data._embedded.events[i].dates.start.localTime.slice(0, 2));
+      let end;
+      if (amPM > 12) {
+        amPM = amPM - 12;
+        end = "PM";
+      } else {
+        end = "AM";
+      }
+      if (amPM === 0) {
+        amPM = 12;
+      }
+      tixCardImageText.textContent = amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
 
-      tixEl.appendChild(eventInfo);
+      // Append both card image and time
+      tixCardImage.appendChild(tixImage);
+      tixCardImage.appendChild(tixCardImageText);
+
+      // Get event name
+      let tixCardContent = document.createElement("div");
+      tixCardContent.classList = "card-content";
+      let tixCardContentP = document.createElement("p");
+      tixCardContentP.textContent = data._embedded.events[i].name;
+
+      tixCardContent.appendChild(tixCardContentP);
+
+      // Get link for event
+      let tixCardAction = document.createElement("div");
+      tixCardAction.classList = "card-action";
+      let tixCardActionA = document.createElement("a");
+      tixCardActionA.textContent = "Click here for ticket info";
+      tixCardActionA.setAttribute("href", data._embedded.events[i].url);
+      tixCardActionA.setAttribute("target", "_blank");
+
+      tixCardAction.appendChild(tixCardActionA);
+
+      // Append the card together
+      tixCard.appendChild(tixCardImage);
+      tixCard.appendChild(tixCardContent);
+      tixCard.appendChild(tixCardAction);
+
+      tixCol.appendChild(tixCard);
+      tixRow.appendChild(tixCol);
+
+      tixEl.appendChild(tixRow);
     }
   }
 };
@@ -141,11 +179,11 @@ var listSeat = function (data) {
     seatEl.removeChild(tixEl.firstChild);
   }
   for (var i = 0; i < 10; i++) {
-    var wrapper = document.createElement("div")
-    if(i % 2 === 0){
-      wrapper.className = "seatEven"
+    var wrapper = document.createElement("div");
+    if (i % 2 === 0) {
+      wrapper.className = "seatEven";
     } else {
-      wrapper.className = "seatOdd"
+      wrapper.className = "seatOdd";
     }
     var eventName = document.createElement("a");
     eventName.textContent = data.events[i].title;
@@ -156,22 +194,24 @@ var listSeat = function (data) {
     venue.textContent = data.events[i].venue.name;
 
     var eventTime = document.createElement("div");
-    eventTime.textContent = moment(data.events[i].datetime_local).format('h:mm a');
+    eventTime.textContent = moment(data.events[i].datetime_local).format(
+      "h:mm a"
+    );
 
-    if(data.events[i].stats.lowest_price){
-    var priceRange = document.createElement("div");
-    var minPrice = data.events[i].stats.lowest_price;
-    var maxPrice = data.events[i].stats.highest_price;
-    priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
+    if (data.events[i].stats.lowest_price) {
+      var priceRange = document.createElement("div");
+      var minPrice = data.events[i].stats.lowest_price;
+      var maxPrice = data.events[i].stats.highest_price;
+      priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
     }
 
     wrapper.appendChild(eventName);
     wrapper.appendChild(venue);
     wrapper.appendChild(eventTime);
-    if(priceRange){
-    wrapper.appendChild(priceRange);
+    if (priceRange) {
+      wrapper.appendChild(priceRange);
     }
-    seatEl.appendChild(wrapper)
+    seatEl.appendChild(wrapper);
   }
 };
 // ==================================================
@@ -218,12 +258,11 @@ var weatherIcon = function (id) {
 
 // ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
-
   // let weatherEl = document.createElement("div");
   var temp = weather.main.temp;
   var icon = weatherIcon(weather.weather[0].id);
   // weatherEl.textContent = temp;
-  weatherContainer.textContent= temp
+  weatherContainer.textContent = temp;
 };
 // ==================================================
 
@@ -234,10 +273,10 @@ var eventFormHandler = function (event) {
   var location = city.value;
 
   if (location) {
-    cityTitle.textContent=location.toUpperCase()
+    cityTitle.textContent = location.toUpperCase();
     getTix(location);
     getWeather(location);
-    getSeat(location)
+    getSeat(location);
     city.value = "";
   } else {
     alert("!!!!");
