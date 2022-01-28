@@ -138,7 +138,7 @@ var listTix = function (data) {
 
 var listSeat = function (data) {
   while (seatEl.firstChild) {
-    seatEl.removeChild(tixEl.firstChild);
+    seatEl.removeChild(seatEl.firstChild);
   }
   for (var i = 0; i < 10; i++) {
     var wrapper = document.createElement("div")
