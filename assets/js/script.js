@@ -270,6 +270,9 @@ var displayWeather = function (weather) {
 var eventFormHandler = function (event) {
   event.preventDefault();
 
+  loader(tixEl)
+  loader(seatEl)
+
   var location = city.value;
 
   if (location) {
@@ -283,5 +286,41 @@ var eventFormHandler = function (event) {
   }
 };
 // ==================================================
+
+// ===================LOADER=======================
+
+function loader(appendWhere){
+
+  let preloader =document.createElement("div")
+  preloader.classList ="preloader-wrapper big active"
+
+  let spinner= document.createElement("div")
+  spinner.classList = "spinner-layer spinner-blue-only"
+
+  let circleClipperLeft =document.createElement("div")
+  circleClipperLeft.classList="circle-clipper left"
+
+  let gap = document.createElement("div")
+  gap.classList="gap-patch"
+
+  let circleClipperRight =document.createElement("div")
+  circleClipperRight.classList="circle-clipper right"
+
+  let circle = document.createElement("div")
+  circle.classList="circle"
+
+  circleClipperLeft.appendChild(circle)
+  gap.appendChild(circle)
+  circleClipperRight.appendChild(circle)
+
+  spinner.appendChild(circleClipperLeft)
+  spinner.appendChild(gap)
+  spinner.appendChild(circleClipperRight)
+
+  preloader.appendChild(spinner)
+
+  appendWhere.appendChild(preloader)
+
+}
 
 formEl.addEventListener("submit", eventFormHandler);
