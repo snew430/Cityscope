@@ -81,6 +81,7 @@ function getSeat(location) {
     clientId;
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
+      console.log(data);
       listSeat(data);
     });
   });
@@ -176,41 +177,86 @@ var listSeat = function (data) {
     seatEl.removeChild(seatEl.firstChild);
   }
   for (var i = 0; i < 10; i++) {
-    var wrapper = document.createElement("div");
-    if (i % 2 === 0) {
-      wrapper.className = "seatEven";
-    } else {
-      wrapper.className = "seatOdd";
-    }
-    var eventName = document.createElement("a");
-    eventName.textContent = data.events[i].title;
-    eventName.setAttribute("href", data.events[i].url);
-    eventName.setAttribute("target", "_blank");
+          // Create Divs for Cards
+          let seatRow = document.createElement("div");
+          seatRow.classList = "row";
+    
+          let seatCol = document.createElement("div");
+          seatCol.classList = "col s6 l3 m17";
+    
+          let seatCard = document.createElement("div");
+          seatCard.classList = "card small";
+    
+          let seatCardImage = document.createElement("div");
+          seatCardImage.classList = "card-image";
+    
+          // Get Card Image
+          let seatImage = document.createElement("img");
+         seatImage.setAttribute("src", data.events[i].performers[0].image);
+         // Get Time of event
+      let seatTime = document.createElement("span");
+      seatTime.classList = "card-title";
+      seatTime.textContent = moment(data.events[i].datetime_local).format(
+        "h:mm a"
+      );
+      // append time and image to card
+      seatCardImage.appendChild(seatImage);
+      seatCardImage.appendChild(seatTime);
+      // event name
+      let eventName = document.createElement("div");
+      eventName.classList = "card-content";
+      let eventNameP = document.createElement("p");
+      eventNameP.textContent = data.events[i].title;
+      eventName.appendChild(eventNameP)
 
-    var venue = document.createElement("div");
-    venue.textContent = data.events[i].venue.name;
+            // Get link for event
+            let seatCardAction = document.createElement("div");
+            seatCardAction.classList = "card-action";
+            let seatCardActionA = document.createElement("a");
+            seatCardActionA.textContent = "Click here for ticket info";
+            seatCardActionA.setAttribute("href", data.events[i].url);
+            seatCardActionA.setAttribute("target", "_blank");
+      
+            seatCardAction.appendChild(seatCardActionA);
 
-    var eventTime = document.createElement("div");
-    eventTime.textContent = moment(data.events[i].datetime_local).format(
-      "h:mm a"
-    );
+        // Append the card together
+        seatCard.appendChild(seatCardImage);
+        seatCard.appendChild(eventName);
+        seatCard.appendChild(seatCardAction);
+  
+        seatCol.appendChild(seatCard);
+        seatRow.appendChild(seatCol);
+  
+        seatEl.appendChild(seatRow);
+      
+//     var eventName = document.createElement("a");
+//     eventName.textContent = data.events[i].title;
+//     eventName.setAttribute("href", data.events[i].url);
+//     eventName.setAttribute("target", "_blank");
 
-    if (data.events[i].stats.lowest_price) {
-      var priceRange = document.createElement("div");
-      var minPrice = data.events[i].stats.lowest_price;
-      var maxPrice = data.events[i].stats.highest_price;
-      priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
-    }
+//     var venue = document.createElement("div");
+//     venue.textContent = data.events[i].venue.name;
 
-    wrapper.appendChild(eventName);
-    wrapper.appendChild(venue);
-    wrapper.appendChild(eventTime);
-    if (priceRange) {
-      wrapper.appendChild(priceRange);
-    }
+//     var eventTime = document.createElement("div");
+//     eventTime.textContent = moment(data.events[i].datetime_local).format(
+//       "h:mm a"
+//     );
 
-    seatEl.appendChild(wrapper);
-    console.log(seatEl)
+//     if (data.events[i].stats.lowest_price) {
+//       var priceRange = document.createElement("div");
+//       var minPrice = data.events[i].stats.lowest_price;
+//       var maxPrice = data.events[i].stats.highest_price;
+//       priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
+//     }
+
+//     wrapper.appendChild(eventName);
+//     wrapper.appendChild(venue);
+//     wrapper.appendChild(eventTime);
+//     if (priceRange) {
+//       wrapper.appendChild(priceRange);
+//     }
+
+//     seatEl.appendChild(wrapper);
   }
 };
 // ==================================================

@@ -12,3 +12,6 @@ header div h1 {
 .seatEven {
     background-color: rgb(173, 170, 170);
 }
+.site-header{
+    border-bottom: 5px solid black;
+}
