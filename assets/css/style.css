@@ -1,0 +1,23 @@
+header {
+}
+#city-title{position:fixed;}
+
+header div {
+}
+
+header div h1 {
+}
+.seatOdd {
+    background-color: gray;
+}
+.seatEven {
+    background-color: rgb(173, 170, 170);
+}
+.site-header{
+    border-bottom: 5px solid black;
+}
+#city-title {
+    width: 100;
+    display: flex;
+    justify-content: center;
+}
