@@ -259,8 +259,7 @@ var listSeat = function (data) {
 //     seatEl.appendChild(wrapper);
   }
 };
-// ==================================================
-
+// ================Get City photos==================================
 // ========Which Weather Icon to Use==============
 var weatherIcon = function (id) {
   // List which icons to use
