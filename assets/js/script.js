@@ -98,36 +98,80 @@ var listTix = function (data) {
   while (tixEl.firstChild) {
     tixEl.removeChild(tixEl.firstChild);
   }
-  for (var i = 0; i < data._embedded.events.length; i++) {
-    // Create Divs for Cards
-    let tixRow = document.createElement("div");
-    tixRow.classList = "row";
-
-    let tixCol = document.createElement("div");
-    tixCol.classList = "col s6 l3 m17";
-
-    let tixCard = document.createElement("div");
-    tixCard.classList = "card small hoverable";
-
-    let tixCardImage = document.createElement("div");
-    tixCardImage.classList = "card-image";
-
-    // Get Card Image
-    let tixImage = document.createElement("img");
-    tixImage.setAttribute("src", data._embedded.events[i].images[0].url);
-
-    // Get Time of event
-    let tixCardImageText = document.createElement("span");
-    tixCardImageText.classList = "card-title";
-    let amPM = parseInt(
-      data._embedded.events[i].dates.start.localTime.slice(0, 2)
+  if (data._embedded === undefined) {
+    alert();
+    modalInitialize(
+      "It looks like there are no events going on today through TicketMaster"
     );
-    let end;
-    if (amPM > 12) {
-      amPM = amPM - 12;
-      end = "PM";
-    } else {
-      end = "AM";
+  } else {
+    for (var i = 0; i < data._embedded.events.length; i++) {
+      // Create Divs for Cards
+      let tixRow = document.createElement("div");
+      tixRow.classList = "row";
+
+      let tixCol = document.createElement("div");
+      tixCol.classList = "col s12";
+
+      let tixCard = document.createElement("div");
+      tixCard.classList = "card small hoverable s12 m6";
+
+      let tixCardImage = document.createElement("div");
+      tixCardImage.classList = "card-image";
+
+      // Get Card Image
+      let tixImage = document.createElement("img");
+      tixImage.setAttribute("src", data._embedded.events[i].images[0].url);
+
+      // Get Time of event
+      let tixCardImageText = document.createElement("span");
+      tixCardImageText.classList = "card-title";
+      let amPM = parseInt(
+        data._embedded.events[i].dates.start.localTime.slice(0, 2)
+      );
+      let end;
+      if (amPM > 12) {
+        amPM = amPM - 12;
+        end = "PM";
+      } else {
+        end = "AM";
+      }
+      if (amPM === 0) {
+        amPM = 12;
+      }
+      tixCardImageText.textContent =
+        amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
+
+      // Append both card image and time
+      tixCardImage.appendChild(tixImage);
+      tixCardImage.appendChild(tixCardImageText);
+
+      // Get event name
+      let tixCardContent = document.createElement("div");
+      tixCardContent.classList = "card-content";
+      let tixCardContentP = document.createElement("p");
+      tixCardContentP.textContent = data._embedded.events[i].name;
+
+      tixCardContent.appendChild(tixCardContentP);
+
+      // Get link for event
+      let tixCardAction = document.createElement("div");
+      tixCardAction.classList = "card-action";
+      let tixCardActionA = document.createElement("a");
+      tixCardActionA.textContent = "Click here for ticket info";
+      tixCardActionA.setAttribute("href", data._embedded.events[i].url);
+      tixCardActionA.setAttribute("target", "_blank");
+
+      tixCardAction.appendChild(tixCardActionA);
+
+      // Append the card together
+      tixCard.appendChild(tixCardImage);
+      tixCard.appendChild(tixCardContent);
+      tixCard.appendChild(tixCardAction);
+
+      tixCol.appendChild(tixCard);
+      tixRow.appendChild(tixCol);
+
+      tixEl.appendChild(tixRow);
     }
     if (amPM === 0) {
       amPM = 12;
@@ -182,10 +226,10 @@ var listSeat = function (data) {
     seatRow.classList = "row";
 
     let seatCol = document.createElement("div");
-    seatCol.classList = "col s6 l3 m17";
+    seatCol.classList = "col s12";
 
     let seatCard = document.createElement("div");
-    seatCard.classList = "card small hoverable";
+    seatCard.classList = "card small hoverable s12 m6";
 
     let seatCardImage = document.createElement("div");
     seatCardImage.classList = "card-image";
@@ -228,10 +272,38 @@ var listSeat = function (data) {
     seatRow.appendChild(seatCol);
 
     seatEl.appendChild(seatRow);
+
+    //     var eventName = document.createElement("a");
+    //     eventName.textContent = data.events[i].title;
+    //     eventName.setAttribute("href", data.events[i].url);
+    //     eventName.setAttribute("target", "_blank");
+
+    //     var venue = document.createElement("div");
+    //     venue.textContent = data.events[i].venue.name;
+
+    //     var eventTime = document.createElement("div");
+    //     eventTime.textContent = moment(data.events[i].datetime_local).format(
+    //       "h:mm a"
+    //     );
+
+    //     if (data.events[i].stats.lowest_price) {
+    //       var priceRange = document.createElement("div");
+    //       var minPrice = data.events[i].stats.lowest_price;
+    //       var maxPrice = data.events[i].stats.highest_price;
+    //       priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
+    //     }
+
+    //     wrapper.appendChild(eventName);
+    //     wrapper.appendChild(venue);
+    //     wrapper.appendChild(eventTime);
+    //     if (priceRange) {
+    //       wrapper.appendChild(priceRange);
+    //     }
+
+    //     seatEl.appendChild(wrapper);
   }
 };
-// ==================================================
-
+// ================Get City photos==================================
 // ========Which Weather Icon to Use==============
 var weatherIcon = function (id) {
   // List which icons to use
@@ -329,7 +401,7 @@ var eventFormHandler = function (event) {
     saveCity(location);
     city.value = "";
   } else {
-    modalInitialize("You did not enter a city.  Try again!")
+    modalInitialize("You did not enter a city.  Try again!");
   }
 };
 // ==================================================
