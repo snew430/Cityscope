@@ -1,6 +1,15 @@
 header {
 }
-#city-title{position:fixed;}
+
+#city-title-parent{
+    position: -webkit-sticky;
+    position: sticky;
+
+    top: 0;
+
+    z-index: 999;
+    background-color: white;
+}
 
 header div {
 }
