@@ -17,22 +17,19 @@
   </head>
   <body>
     <header class="">
-      <div class="blue darken-4 circle pulse">
+      <div class="blue darken-4 circle">
         <h1 class="blue-text accent-2 center-align">E-VENTScope</h1>
       </div>
     </header>
 
-    <nav>
+    <!-- <nav>
       <div class="nav-wrapper blue darken-4">
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"
-          ><i class="material-icons">menu</i></a
-        >
         <ul class="right hide-on-med-and-down">
-          <li><a href="#ticketmaster">TicketMaster Events</a></li>
-          <li><a href="#seatgeek">SeatGeek Events</a></li>
+          <li><a class="nav-btn" href="#ticketmaster">TicketMaster Events</a></li>
+          <li><a class="nav-btn" href="#seatgeek">SeatGeek Events</a></li>
         </ul>
       </div>
-    </nav>
+    </nav> -->
 
     <nav>
       <div class="nav-wrapper blue darken-4">
@@ -47,6 +44,10 @@
         </form>
       </div>
     </nav>
+    <nav class="white" id="nav-bar">
+      <a class="nav-btn blue-text" href="#ticketmaster">TicketMaster Events</a>
+      <a class="nav-btn blue-text" href="#seatgeek">SeatGeek Events</a>
+    </nav>
 
     <!-- check alignment of city title to see if it is run throug js -->
    
@@ -56,12 +57,12 @@
         <p id="weather"></p>
       </div>
      <div class="row">
-      <div class="col s6">
+      <div class="col s12 m6">
         <h2 class="site-header">Ticketmaster</h2>
         <div class="card-panel" id="ticketmaster">
         </div>
        </div> 
-      <div class="col s6">   
+      <div class="col s12 m6">   
        <h2 class="site-header">Seatgeek</h2>
         <div class="card-panel" id="seatgeek">
         </div>
