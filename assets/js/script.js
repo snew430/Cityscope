@@ -103,10 +103,10 @@ var listTix = function (data) {
       tixRow.classList = "row";
 
       let tixCol = document.createElement("div");
-      tixCol.classList = "col s6 l3 m17";
+      tixCol.classList = "col s12";
 
       let tixCard = document.createElement("div");
-      tixCard.classList = "card small hoverable";
+      tixCard.classList = "card small hoverable s12 m6";
 
       let tixCardImage = document.createElement("div");
       tixCardImage.classList = "card-image";
@@ -182,10 +182,10 @@ var listSeat = function (data) {
           seatRow.classList = "row";
     
           let seatCol = document.createElement("div");
-          seatCol.classList = "col s6 l3 m17";
+          seatCol.classList = "col s12";
     
           let seatCard = document.createElement("div");
-          seatCard.classList = "card small hoverable";
+          seatCard.classList = "card small hoverable s12 m6";
     
           let seatCardImage = document.createElement("div");
           seatCardImage.classList = "card-image";
