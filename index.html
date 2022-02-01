@@ -48,20 +48,30 @@
       </div>
     </nav>
 
-    <main id="main-body">
-      <div class="">
-        <h2 id="city-title"></h2>
+    <!-- check alignment of city title to see if it is run throug js -->
+   
+<main id="main-body">
+      <div class="center-align">
+        <h2 class="" id="city-title"></h2>
         <p id="weather"></p>
       </div>
-      <h2 class="site-header">Ticketmaster</h2>
-      <div class="" id="ticketmaster">
-      </div>
-      <h2 class="site-header">Seatgeek</h2>
-      <div class="" id="seatgeek">
-      </div>
+     <div class="row">
+      <div class="col s6">
+        <h2 class="site-header">Ticketmaster</h2>
+        <div class="card-panel" id="ticketmaster">
+        </div>
+       </div> 
+      <div class="col s6">   
+       <h2 class="site-header">Seatgeek</h2>
+        <div class="card-panel" id="seatgeek">
+        </div>
+      </div> 
+    </div>
     </main>
 
-    <footer></footer>
+    <footer>
+
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
