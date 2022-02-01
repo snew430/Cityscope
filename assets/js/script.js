@@ -54,10 +54,14 @@ var getWeather = function (location) {
   fetch(weatherUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
+        cityTitle.textContent = location.toUpperCase();
         displayWeather(data);
+        getTix(location);
+        getSeat(location);
+        saveCity(location);
       });
     } else {
-      modalInitialize("Weather Could Not Be Found");
+      modalInitialize(location.toUpperCase()+" could not be found.  Try another city");
     }
   });
 };
@@ -99,7 +103,6 @@ var listTix = function (data) {
     tixEl.removeChild(tixEl.firstChild);
   }
   if (data._embedded === undefined) {
-    alert();
     modalInitialize(
       "It looks like there are no events going on today through TicketMaster"
     );
@@ -303,7 +306,7 @@ var listSeat = function (data) {
     //     seatEl.appendChild(wrapper);
   }
 };
-// ================Get City photos==================================
+
 // ========Which Weather Icon to Use==============
 var weatherIcon = function (id) {
   // List which icons to use
@@ -394,11 +397,7 @@ var eventFormHandler = function (event) {
   var location = city.value;
 
   if (location) {
-    cityTitle.textContent = location.toUpperCase();
-    getTix(location);
     getWeather(location);
-    getSeat(location);
-    saveCity(location);
     city.value = "";
   } else {
     modalInitialize("You did not enter a city.  Try again!");
