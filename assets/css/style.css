@@ -30,3 +30,12 @@ header div h1 {
     display: flex;
     justify-content: center;
 }
+#nav-bar{
+    display: none;
+}
+@media screen and (max-width: 390px) {
+    #nav-bar {
+        display: flex;
+        justify-content: space-around;
+    }
+}

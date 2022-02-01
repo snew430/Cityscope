@@ -394,6 +394,7 @@ function loader(appendWhere) {
   preloader.appendChild(spinner);
 
   appendWhere.appendChild(preloader);
+
 }
 // =======================================================
 
