@@ -6,6 +6,10 @@ var seatEl = document.querySelector("#seatgeek");
 var formEl = document.querySelector("#city-form");
 var weatherContainer = document.querySelector("#weather");
 var cityTitle = document.querySelector("#city-title");
+var modalContainer = document.querySelector(".modal");
+var modalText = document.querySelector("#modal-text");
+var modalAlert = M.Modal.init(modalContainer);
+var modalClose = document.querySelector(".modal-close");
 
 let cityToSave = [];
 
@@ -33,7 +37,7 @@ var getTix = function (x) {
         listTix(data);
       });
     } else {
-      alert("Sorry, Events could not be found");
+      modalInitialize("Sorry, Events could not be found");
     }
   });
 };
@@ -53,7 +57,7 @@ var getWeather = function (location) {
         displayWeather(data);
       });
     } else {
-      alert("Sorry, Weather could not be found");
+      modalInitialize("Weather Could Not Be Found");
     }
   });
 };
@@ -94,78 +98,74 @@ var listTix = function (data) {
   while (tixEl.firstChild) {
     tixEl.removeChild(tixEl.firstChild);
   }
-  if (data._embedded === undefined) {
-    alert("looks like theres no event going on today through ticketmaster");
-  } else {
-    for (var i = 0; i < data._embedded.events.length; i++) {
-      // Create Divs for Cards
-      let tixRow = document.createElement("div");
-      tixRow.classList = "row";
+  for (var i = 0; i < data._embedded.events.length; i++) {
+    // Create Divs for Cards
+    let tixRow = document.createElement("div");
+    tixRow.classList = "row";
 
-      let tixCol = document.createElement("div");
-      tixCol.classList = "col s6 l3 m17";
+    let tixCol = document.createElement("div");
+    tixCol.classList = "col s6 l3 m17";
 
-      let tixCard = document.createElement("div");
-      tixCard.classList = "card small hoverable";
+    let tixCard = document.createElement("div");
+    tixCard.classList = "card small hoverable";
 
-      let tixCardImage = document.createElement("div");
-      tixCardImage.classList = "card-image";
+    let tixCardImage = document.createElement("div");
+    tixCardImage.classList = "card-image";
 
-      // Get Card Image
-      let tixImage = document.createElement("img");
-      tixImage.setAttribute("src", data._embedded.events[i].images[0].url);
+    // Get Card Image
+    let tixImage = document.createElement("img");
+    tixImage.setAttribute("src", data._embedded.events[i].images[0].url);
 
-      // Get Time of event
-      let tixCardImageText = document.createElement("span");
-      tixCardImageText.classList = "card-title";
-      let amPM = parseInt(
-        data._embedded.events[i].dates.start.localTime.slice(0, 2)
-      );
-      let end;
-      if (amPM > 12) {
-        amPM = amPM - 12;
-        end = "PM";
-      } else {
-        end = "AM";
-      }
-      if (amPM === 0) {
-        amPM = 12;
-      }
-      tixCardImageText.textContent =
-        amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
-
-      // Append both card image and time
-      tixCardImage.appendChild(tixImage);
-      tixCardImage.appendChild(tixCardImageText);
-
-      // Get event name
-      let tixCardContent = document.createElement("div");
-      tixCardContent.classList = "card-content";
-      let tixCardContentP = document.createElement("p");
-      tixCardContentP.textContent = data._embedded.events[i].name;
-
-      tixCardContent.appendChild(tixCardContentP);
-
-      // Get link for event
-      let tixCardAction = document.createElement("div");
-      tixCardAction.classList = "card-action";
-      let tixCardActionA = document.createElement("a");
-      tixCardActionA.textContent = "Click here for ticket info";
-      tixCardActionA.setAttribute("href", data._embedded.events[i].url);
-      tixCardActionA.setAttribute("target", "_blank");
-
-      tixCardAction.appendChild(tixCardActionA);
-
-      // Append the card together
-      tixCard.appendChild(tixCardImage);
-      tixCard.appendChild(tixCardContent);
-      tixCard.appendChild(tixCardAction);
-
-      tixCol.appendChild(tixCard);
-      tixRow.appendChild(tixCol);
-
-      tixEl.appendChild(tixRow);
+    // Get Time of event
+    let tixCardImageText = document.createElement("span");
+    tixCardImageText.classList = "card-title";
+    let amPM = parseInt(
+      data._embedded.events[i].dates.start.localTime.slice(0, 2)
+    );
+    let end;
+    if (amPM > 12) {
+      amPM = amPM - 12;
+      end = "PM";
+    } else {
+      end = "AM";
     }
+    if (amPM === 0) {
+      amPM = 12;
+    }
+    tixCardImageText.textContent =
+      amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
+
+    // Append both card image and time
+    tixCardImage.appendChild(tixImage);
+    tixCardImage.appendChild(tixCardImageText);
+
+    // Get event name
+    let tixCardContent = document.createElement("div");
+    tixCardContent.classList = "card-content";
+    let tixCardContentP = document.createElement("p");
+    tixCardContentP.textContent = data._embedded.events[i].name;
+
+    tixCardContent.appendChild(tixCardContentP);
+
+    // Get link for event
+    let tixCardAction = document.createElement("div");
+    tixCardAction.classList = "card-action";
+    let tixCardActionA = document.createElement("a");
+    tixCardActionA.textContent = "Click here for ticket info";
+    tixCardActionA.setAttribute("href", data._embedded.events[i].url);
+    tixCardActionA.setAttribute("target", "_blank");
+
+    tixCardAction.appendChild(tixCardActionA);
+
+    // Append the card together
+    tixCard.appendChild(tixCardImage);
+    tixCard.appendChild(tixCardContent);
+    tixCard.appendChild(tixCardAction);
+
+    tixCol.appendChild(tixCard);
+    tixRow.appendChild(tixCol);
+
+    tixEl.appendChild(tixRow);
   }
 };
 // ==============================================
@@ -177,86 +177,57 @@ var listSeat = function (data) {
     seatEl.removeChild(seatEl.firstChild);
   }
   for (var i = 0; i < 10; i++) {
-          // Create Divs for Cards
-          let seatRow = document.createElement("div");
-          seatRow.classList = "row";
-    
-          let seatCol = document.createElement("div");
-          seatCol.classList = "col s6 l3 m17";
-    
-          let seatCard = document.createElement("div");
-          seatCard.classList = "card small hoverable";
-    
-          let seatCardImage = document.createElement("div");
-          seatCardImage.classList = "card-image";
-    
-          // Get Card Image
-          let seatImage = document.createElement("img");
-         seatImage.setAttribute("src", data.events[i].performers[0].image);
-         // Get Time of event
-      let seatTime = document.createElement("span");
-      seatTime.classList = "card-title";
-      seatTime.textContent = moment(data.events[i].datetime_local).format(
-        "h:mm a"
-      );
-      // append time and image to card
-      seatCardImage.appendChild(seatImage);
-      seatCardImage.appendChild(seatTime);
-      // event name
-      let eventName = document.createElement("div");
-      eventName.classList = "card-content";
-      let eventNameP = document.createElement("p");
-      eventNameP.textContent = data.events[i].title;
-      eventName.appendChild(eventNameP)
+    // Create Divs for Cards
+    let seatRow = document.createElement("div");
+    seatRow.classList = "row";
 
-            // Get link for event
-            let seatCardAction = document.createElement("div");
-            seatCardAction.classList = "card-action";
-            let seatCardActionA = document.createElement("a");
-            seatCardActionA.textContent = "Click here for ticket info";
-            seatCardActionA.setAttribute("href", data.events[i].url);
-            seatCardActionA.setAttribute("target", "_blank");
-      
-            seatCardAction.appendChild(seatCardActionA);
+    let seatCol = document.createElement("div");
+    seatCol.classList = "col s6 l3 m17";
 
-        // Append the card together
-        seatCard.appendChild(seatCardImage);
-        seatCard.appendChild(eventName);
-        seatCard.appendChild(seatCardAction);
-  
-        seatCol.appendChild(seatCard);
-        seatRow.appendChild(seatCol);
-  
-        seatEl.appendChild(seatRow);
-      
-//     var eventName = document.createElement("a");
-//     eventName.textContent = data.events[i].title;
-//     eventName.setAttribute("href", data.events[i].url);
-//     eventName.setAttribute("target", "_blank");
+    let seatCard = document.createElement("div");
+    seatCard.classList = "card small hoverable";
 
-//     var venue = document.createElement("div");
-//     venue.textContent = data.events[i].venue.name;
+    let seatCardImage = document.createElement("div");
+    seatCardImage.classList = "card-image";
 
-//     var eventTime = document.createElement("div");
-//     eventTime.textContent = moment(data.events[i].datetime_local).format(
-//       "h:mm a"
-//     );
+    // Get Card Image
+    let seatImage = document.createElement("img");
+    seatImage.setAttribute("src", data.events[i].performers[0].image);
+    // Get Time of event
+    let seatTime = document.createElement("span");
+    seatTime.classList = "card-title";
+    seatTime.textContent = moment(data.events[i].datetime_local).format(
+      "h:mm a"
+    );
+    // append time and image to card
+    seatCardImage.appendChild(seatImage);
+    seatCardImage.appendChild(seatTime);
+    // event name
+    let eventName = document.createElement("div");
+    eventName.classList = "card-content";
+    let eventNameP = document.createElement("p");
+    eventNameP.textContent = data.events[i].title;
+    eventName.appendChild(eventNameP);
 
-//     if (data.events[i].stats.lowest_price) {
-//       var priceRange = document.createElement("div");
-//       var minPrice = data.events[i].stats.lowest_price;
-//       var maxPrice = data.events[i].stats.highest_price;
-//       priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
-//     }
+    // Get link for event
+    let seatCardAction = document.createElement("div");
+    seatCardAction.classList = "card-action";
+    let seatCardActionA = document.createElement("a");
+    seatCardActionA.textContent = "Click here for ticket info";
+    seatCardActionA.setAttribute("href", data.events[i].url);
+    seatCardActionA.setAttribute("target", "_blank");
 
-//     wrapper.appendChild(eventName);
-//     wrapper.appendChild(venue);
-//     wrapper.appendChild(eventTime);
-//     if (priceRange) {
-//       wrapper.appendChild(priceRange);
-//     }
+    seatCardAction.appendChild(seatCardActionA);
 
-//     seatEl.appendChild(wrapper);
+    // Append the card together
+    seatCard.appendChild(seatCardImage);
+    seatCard.appendChild(eventName);
+    seatCard.appendChild(seatCardAction);
+
+    seatCol.appendChild(seatCard);
+    seatRow.appendChild(seatCol);
+
+    seatEl.appendChild(seatRow);
   }
 };
 // ==================================================
@@ -330,7 +301,7 @@ function loadCity() {
   if (!cityToSave) {
     cityToSave = [];
   } else if (cityToSave[1] !== moment().format("MMDD")) {
-    alert("its a different day");
+    modalInitialize("It's A Different Day.  Please Reload Page");
   } else {
     cityTitle.textContent = cityToSave[0].toUpperCase();
     getTix(cityToSave[0]);
@@ -346,6 +317,7 @@ var eventFormHandler = function (event) {
 
   loader(tixEl);
   loader(seatEl);
+  console.log(modalAlert);
 
   var location = city.value;
 
@@ -357,10 +329,18 @@ var eventFormHandler = function (event) {
     saveCity(location);
     city.value = "";
   } else {
-    alert("!!!!");
+    modalInitialize("You did not enter a city.  Try again!")
   }
 };
 // ==================================================
+
+// =============Modal Alert==================
+function modalInitialize(text) {
+  modalText.textContent = text;
+
+  modalAlert.open();
+}
+// ==========================================
 
 // ===================LOADER=======================
 
@@ -399,3 +379,6 @@ function loader(appendWhere) {
 
 loadCity();
 formEl.addEventListener("submit", eventFormHandler);
+modalClose.addEventListener("click", function () {
+  modalAlert.close();
+});
