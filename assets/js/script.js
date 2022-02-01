@@ -106,7 +106,7 @@ var listTix = function (data) {
       tixCol.classList = "col s6 l3 m17";
 
       let tixCard = document.createElement("div");
-      tixCard.classList = "card small";
+      tixCard.classList = "card small hoverable";
 
       let tixCardImage = document.createElement("div");
       tixCardImage.classList = "card-image";
@@ -185,7 +185,7 @@ var listSeat = function (data) {
           seatCol.classList = "col s6 l3 m17";
     
           let seatCard = document.createElement("div");
-          seatCard.classList = "card small";
+          seatCard.classList = "card small hoverable";
     
           let seatCardImage = document.createElement("div");
           seatCardImage.classList = "card-image";
