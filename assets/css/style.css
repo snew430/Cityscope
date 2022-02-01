@@ -9,6 +9,16 @@ header {
 
     z-index: 999;
     background-color: white;
+
+    background-image: url(./img/city.jpg);
+    background-position: left center;
+    height: 120px;
+    width: 100%;
+    color: white;
+}
+
+#weather {
+    font-size: 25px;
 }
 
 header div {
@@ -25,3 +35,4 @@ header div h1 {
 .site-header{
     border-bottom: 5px solid black;
 }
+
