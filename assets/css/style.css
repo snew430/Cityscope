@@ -1,0 +1,17 @@
+header {
+}
+
+header div {
+}
+
+header div h1 {
+}
+.seatOdd {
+    background-color: gray;
+}
+.seatEven {
+    background-color: rgb(173, 170, 170);
+}
+.site-header{
+    border-bottom: 5px solid black;
+}
