@@ -1,4 +1,15 @@
-header {
+body{
+    background: lightgray;
+}
+h1{
+    font-family: 'Abril Fatface', cursive;
+    text-shadow: 2px 2px 2px blue;
+}
+.section-header {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 8rem;
 }
 
 #city-title-parent{
@@ -8,7 +19,9 @@ header {
     top: 0;
 
     z-index: 999;
-    background-color: white;
+    background-image: url("/assets/images/pexels-carlos-oliva-3586966.jpg");
+    background-position-y: 58%;
+    background-size: cover;
 }
 
 header div {
@@ -29,9 +42,14 @@ header div h1 {
     width: 100;
     display: flex;
     justify-content: center;
+    font-family: 'Alfa Slab One', cursive;
+    text-shadow: 2px 2px 2px black;
 }
 #nav-bar{
     display: none;
+}
+.opacity{
+    background-color:rgba(0, 0, 0, 0.5);
 }
 @media screen and (max-width: 390px) {
     #nav-bar {
@@ -39,3 +57,4 @@ header div h1 {
         justify-content: space-around;
     }
 }
+

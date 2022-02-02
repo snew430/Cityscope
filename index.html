@@ -12,24 +12,21 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alfa+Slab+One&family=Neonderthaw&family=Open+Sans:wght@400;700&family=Staatliches&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Neonderthaw&family=Open+Sans:wght@400;700&family=Staatliches&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <title>E-VENTScope</title>
+    <title>E-VENT</title>
   </head>
   <body>
     <header class="">
       <div class="blue darken-4 circle">
-        <h1 class="blue-text accent-2 center-align">E-VENTScope</h1>
+        <h1 class="blue-text accent-2 center-align">E-VENT</h1>
       </div>
     </header>
-
-    <!-- <nav>
-      <div class="nav-wrapper blue darken-4">
-        <ul class="right hide-on-med-and-down">
-          <li><a class="nav-btn" href="#ticketmaster">TicketMaster Events</a></li>
-          <li><a class="nav-btn" href="#seatgeek">SeatGeek Events</a></li>
-        </ul>
-      </div>
-    </nav> -->
 
     <nav>
       <div class="nav-wrapper blue lighten-4">
@@ -52,6 +49,7 @@
       <a class="nav-btn blue-text" href="#seatgeek">SeatGeek Events</a>
     </nav>
 
+<<<<<<< HEAD
     <!-- check alignment of city title to see if it is run throug js -->
 <<<<<<< HEAD
 
@@ -61,18 +59,29 @@
    
 <main id="main-body">
 >>>>>>> feature/css
+=======
+    <form action="#" id="date-range">
+      <p class="range-field">
+        <input type="range" id="test5" min="1" max="7" />
+      </p>
+    </form>
+
+    <main class="scale-transition scale-out" id="main-body">
+>>>>>>> 8fdb37f1ea8851330469575bba27a4b6ef132feb
       <div class="center-align" id="city-title-parent">
-        <h2 class="" id="city-title"></h2>
-        <p id="weather"></p>
+        <h2 class="white-text" id="city-title"></h2>
+        <p class="white-text" id="weather"></p>
       </div>
      <div class="row">
-      <div class="col s12 m6">
-        <h2 class="site-header">Ticketmaster</h2>
+      <div class="col s12 m6" id = "tix-column">
+        <img class="section-header" src="https://logos-world.net/wp-content/uploads/2021/03/Ticketmaster-Logo.png" alt="ticketmaster">
+        <!-- <h2 class="site-header center-align">Ticketmaster</h2> -->
         <div class="card-panel" id="ticketmaster">
         </div>
        </div> 
-      <div class="col s12 m6">   
-       <h2 class="site-header">Seatgeek</h2>
+      <div class="col s12 m6" id = "seat-column">   
+        <img class="section-header" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Seatgeek_logo.svg" alt="seatgeek">
+       <!-- <h2 class="site-header center-align">Seatgeek</h2> -->
         <div class="card-panel" id="seatgeek">
         </div>
       </div>
@@ -104,7 +113,6 @@
     <script>
       $(document).ready(function () {
         $(".modal").modal();
-        
       });
     </script>
   </body>
