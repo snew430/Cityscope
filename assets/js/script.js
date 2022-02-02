@@ -256,6 +256,12 @@ var listSeat = function (data) {
     eventNameP.textContent = data.events[i].title;
     eventName.appendChild(eventNameP);
 
+    // price
+    if(data.events[i].stats.lowest_price){
+      let seatPrice = document.createElement("p");
+      seatPrice.textContent = data.events[i].stats.lowest_price;
+      console.log(seatPrice)
+    }
     // Get link for event
     let seatCardAction = document.createElement("div");
     seatCardAction.classList = "card-action";
