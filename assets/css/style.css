@@ -1,4 +1,9 @@
-header {
+body{
+    background: lightgray;
+}
+h1{
+    font-family: 'Abril Fatface', cursive;
+    text-shadow: 2px 2px 2px blue;
 }
 .section-header {
     display: block;
@@ -14,7 +19,9 @@ header {
     top: 0;
 
     z-index: 999;
-    background-color: white;
+    background-image: url("/assets/images/pexels-carlos-oliva-3586966.jpg");
+    background-position-y: 56%;
+    background-size: cover;
 }
 
 header div {
