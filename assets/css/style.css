@@ -1,5 +1,11 @@
 header {
 }
+.section-header {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 8rem;
+}
 
 #city-title-parent{
     position: -webkit-sticky;
@@ -29,6 +35,8 @@ header div h1 {
     width: 100;
     display: flex;
     justify-content: center;
+    font-family: 'Alfa Slab One', cursive;
+    text-shadow: 2px 2px 2px black;
 }
 #nav-bar{
     display: none;
@@ -42,3 +50,4 @@ header div h1 {
         justify-content: space-around;
     }
 }
+
