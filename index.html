@@ -25,15 +25,6 @@
       </div>
     </header>
 
-    <!-- <nav>
-      <div class="nav-wrapper blue darken-4">
-        <ul class="right hide-on-med-and-down">
-          <li><a class="nav-btn" href="#ticketmaster">TicketMaster Events</a></li>
-          <li><a class="nav-btn" href="#seatgeek">SeatGeek Events</a></li>
-        </ul>
-      </div>
-    </nav> -->
-
     <nav>
       <div class="nav-wrapper blue darken-4">
         <form id="city-form">
@@ -52,32 +43,57 @@
       <a class="nav-btn blue-text" href="#seatgeek">SeatGeek Events</a>
     </nav>
 
-    <!-- check alignment of city title to see if it is run throug js -->
-   
-<main id="main-body">
+    <form action="#" id="date-range">
+      <p class="range-field">
+        <input type="range" id="test5" min="1" max="7" />
+      </p>
+    </form>
+
+    <main class="scale-transition scale-out" id="main-body">
       <div class="center-align" id="city-title-parent">
         <h2 class="" id="city-title"></h2>
         <p id="weather"></p>
       </div>
      <div class="row">
-      <div class="col s12 m6">
+      <div class="col s12 m6" id = "tix-column">
         <h2 class="site-header">Ticketmaster</h2>
         <div class="card-panel" id="ticketmaster">
         </div>
        </div> 
-      <div class="col s12 m6">   
+      <div class="col s12 m6" id = "seat-column">   
        <h2 class="site-header">Seatgeek</h2>
         <div class="card-panel" id="seatgeek">
         </div>
-      </div> 
-    </div>
+      </div>
     </main>
 
     <footer>
-
     </footer>
 
+    <div id="alert-modal" class="modal">
+      <div class="modal-content">
+        <h4>Something went wrong :(</h4>
+        <p id="modal-text"></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+          >Close</a
+        >
+      </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-2.1.1.min.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script>
+      $(document).ready(function () {
+        $(".modal").modal();
+      });
+    </script>
   </body>
 </html>
