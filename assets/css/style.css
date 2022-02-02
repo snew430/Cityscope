@@ -33,6 +33,9 @@ header div h1 {
 #nav-bar{
     display: none;
 }
+.opacity{
+    background-color:rgba(0, 0, 0, 0.5);
+}
 @media screen and (max-width: 390px) {
     #nav-bar {
         display: flex;

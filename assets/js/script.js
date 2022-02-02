@@ -6,25 +6,27 @@ var seatEl = document.querySelector("#seatgeek");
 var formEl = document.querySelector("#city-form");
 var weatherContainer = document.querySelector("#weather");
 var cityTitle = document.querySelector("#city-title");
+var mainColumn = document.querySelector("#main-body");
 var modalContainer = document.querySelector(".modal");
 var modalText = document.querySelector("#modal-text");
 var modalAlert = M.Modal.init(modalContainer);
 var modalClose = document.querySelector(".modal-close");
+var slider = document.querySelector("#test5");
 
 let cityToSave = [];
 
 // ==============GET TICKETMASTER INFO===========
 var getTix = function (x) {
+  let daysOut = slider.nextSibling.childNodes[0].textContent;
+  if (daysOut === "") {
+    daysOut = 1;
+  }
   var today = moment().format("YYYY-MM-DD");
-  var tomorrow = moment().add(1, "d").format("YYYY-MM-DD");
+  var til = moment().add(daysOut, "d").format("YYYY-MM-DD");
   var tixParam = "?city=";
   var tixApi = "&apikey=xmxhrLJvMZqBKtD916sfNNAvKoMgFHUv";
   var tixDate =
-    "&startDateTime=" +
-    today +
-    "T00:01:00Z&endDateTime=" +
-    tomorrow +
-    "T01:00:00Z";
+    "&startDateTime=" + today + "T00:01:00Z&endDateTime=" + til + "T01:00:00Z";
   var tixUrl =
     "https://app.ticketmaster.com/discovery/v2/events.json" +
     tixParam +
@@ -54,43 +56,47 @@ var getWeather = function (location) {
   fetch(weatherUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
+        mainColumn.classList.remove("scale-in");
         cityTitle.textContent = location.toUpperCase();
         displayWeather(data);
         getTix(location);
         getSeat(location);
         saveCity(location);
+        mainColumn.classList.add("scale-in");
       });
     } else {
-      modalInitialize(location.toUpperCase()+" could not be found.  Try another city");
+      modalInitialize(
+        location.toUpperCase() + " could not be found.  Try another city"
+      );
     }
   });
 };
 // ==================================================
 
-// ====================Get BandsInTown ==================
-
-function bands() {
-  var bandsUrl =
-    "https://rest.bandsintown.com/artists/ween/events/?app_id=9fd37fb85706620acc6620c7fe4040e8";
-  fetch(bandsUrl).then(function (response) {
-    response.json().then(function (data) {});
-  });
-}
-// ==================================================
-
 // =================Get SeatGeek Events ================
 
 function getSeat(location) {
+  let daysOut = slider.nextSibling.childNodes[0].textContent;
+  if (daysOut === "") {
+    daysOut = 1;
+  }
+  var today = moment().format("YYYY-MM-DD");
+  var til = moment().add(daysOut, "d").format("YYYY-MM-DD");
+
   var clientId = "MjU0ODQxMjJ8MTY0MzE1NTg1NC4wMjk3OTk";
   var seatUrl =
     "https://api.seatgeek.com/2/events?venue.city=" +
     location +
+    "&datetime_utc.gte=" +
+    today +
+    "&datetime_utc.lte=" +
+    til +
     "&client_id=" +
     clientId;
   fetch(seatUrl).then(function (response) {
     response.json().then(function (data) {
-      console.log(data);
       listSeat(data);
+      console.log(data);
     });
   });
 }
@@ -128,21 +134,12 @@ var listTix = function (data) {
       // Get Time of event
       let tixCardImageText = document.createElement("span");
       tixCardImageText.classList = "card-title";
-      let amPM = parseInt(
-        data._embedded.events[i].dates.start.localTime.slice(0, 2)
-      );
-      let end;
-      if (amPM > 12) {
-        amPM = amPM - 12;
-        end = "PM";
-      } else {
-        end = "AM";
-      }
-      if (amPM === 0) {
-        amPM = 12;
-      }
-      tixCardImageText.textContent =
-        amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
+
+      tixCardImageText.textContent = moment(
+        data._embedded.events[i].dates.start.dateTime
+      ).format("MMM Do h:mm a");
+
+      tixCardImageText.classList.add("opacity");
 
       // Append both card image and time
       tixCardImage.appendChild(tixImage);
@@ -176,43 +173,6 @@ var listTix = function (data) {
 
       tixEl.appendChild(tixRow);
     }
-    if (amPM === 0) {
-      amPM = 12;
-    }
-    tixCardImageText.textContent =
-      amPM + data._embedded.events[i].dates.start.localTime.slice(2, 5) + end;
-
-    // Append both card image and time
-    tixCardImage.appendChild(tixImage);
-    tixCardImage.appendChild(tixCardImageText);
-
-    // Get event name
-    let tixCardContent = document.createElement("div");
-    tixCardContent.classList = "card-content";
-    let tixCardContentP = document.createElement("p");
-    tixCardContentP.textContent = data._embedded.events[i].name;
-
-    tixCardContent.appendChild(tixCardContentP);
-
-    // Get link for event
-    let tixCardAction = document.createElement("div");
-    tixCardAction.classList = "card-action";
-    let tixCardActionA = document.createElement("a");
-    tixCardActionA.textContent = "Click here for ticket info";
-    tixCardActionA.setAttribute("href", data._embedded.events[i].url);
-    tixCardActionA.setAttribute("target", "_blank");
-
-    tixCardAction.appendChild(tixCardActionA);
-
-    // Append the card together
-    tixCard.appendChild(tixCardImage);
-    tixCard.appendChild(tixCardContent);
-    tixCard.appendChild(tixCardAction);
-
-    tixCol.appendChild(tixCard);
-    tixRow.appendChild(tixCol);
-
-    tixEl.appendChild(tixRow);
   }
 };
 // ==============================================
@@ -237,15 +197,20 @@ var listSeat = function (data) {
     let seatCardImage = document.createElement("div");
     seatCardImage.classList = "card-image";
 
+    console.log(data.events[i].performers);
+
     // Get Card Image
     let seatImage = document.createElement("img");
     seatImage.setAttribute("src", data.events[i].performers[0].image);
     // Get Time of event
     let seatTime = document.createElement("span");
     seatTime.classList = "card-title";
+
     seatTime.textContent = moment(data.events[i].datetime_local).format(
-      "h:mm a"
+      "MMM Do h:mm a"
     );
+
+    seatTime.classList.add("opacity");
     // append time and image to card
     seatCardImage.appendChild(seatImage);
     seatCardImage.appendChild(seatTime);
@@ -275,35 +240,6 @@ var listSeat = function (data) {
     seatRow.appendChild(seatCol);
 
     seatEl.appendChild(seatRow);
-
-    //     var eventName = document.createElement("a");
-    //     eventName.textContent = data.events[i].title;
-    //     eventName.setAttribute("href", data.events[i].url);
-    //     eventName.setAttribute("target", "_blank");
-
-    //     var venue = document.createElement("div");
-    //     venue.textContent = data.events[i].venue.name;
-
-    //     var eventTime = document.createElement("div");
-    //     eventTime.textContent = moment(data.events[i].datetime_local).format(
-    //       "h:mm a"
-    //     );
-
-    //     if (data.events[i].stats.lowest_price) {
-    //       var priceRange = document.createElement("div");
-    //       var minPrice = data.events[i].stats.lowest_price;
-    //       var maxPrice = data.events[i].stats.highest_price;
-    //       priceRange.textContent = "Price: $" + minPrice + "- $" + maxPrice;
-    //     }
-
-    //     wrapper.appendChild(eventName);
-    //     wrapper.appendChild(venue);
-    //     wrapper.appendChild(eventTime);
-    //     if (priceRange) {
-    //       wrapper.appendChild(priceRange);
-    //     }
-
-    //     seatEl.appendChild(wrapper);
   }
 };
 
@@ -362,8 +298,6 @@ function saveCity(location) {
   cityToSave.push(location);
   cityToSave.push(currentDay);
 
-  console.log(cityToSave);
-
   localStorage.setItem("city", JSON.stringify(cityToSave));
 }
 // ==================================================
@@ -392,7 +326,6 @@ var eventFormHandler = function (event) {
 
   loader(tixEl);
   loader(seatEl);
-  console.log(modalAlert);
 
   var location = city.value;
 
