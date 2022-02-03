@@ -12,6 +12,7 @@ var modalText = document.querySelector("#modal-text");
 var modalAlert = M.Modal.init(modalContainer);
 var modalClose = document.querySelector(".modal-close");
 var slider = document.querySelector("#test5");
+var refreshButton = document.querySelector("#refresh-button");
 
 let cityToSave = [];
 
@@ -196,7 +197,6 @@ var listSeat = function (data) {
     let seatCardImage = document.createElement("div");
     seatCardImage.classList = "card-image";
 
-
     // Get Card Image
     let seatImage = document.createElement("img");
     seatImage.setAttribute("src", data.events[i].performers[0].image);
@@ -219,13 +219,11 @@ var listSeat = function (data) {
     eventNameP.textContent = data.events[i].title;
     eventName.appendChild(eventNameP);
 
-    // price
-    if(data.events[i].stats.lowest_price){
-      var seatPrice = document.createElement("p");
-      seatPrice.textContent = data.events[i].stats.lowest_price;
-       }
-      eventName.appendChild(seatPrice);
-       console.log(eventName)
+    // // price
+    // if (data.events[i].stats.lowest_price) {
+    //   let seatPrice = document.createElement("p");
+    //   seatPrice.textContent = data.events[i].stats.lowest_price;
+    // }
     // Get link for event
     let seatCardAction = document.createElement("div");
     seatCardAction.classList = "card-action";
@@ -239,7 +237,7 @@ var listSeat = function (data) {
     // Append the card together
     seatCard.appendChild(seatCardImage);
     seatCard.appendChild(eventName);
-    seatCard.appendChild(seatPrice); 
+    // seatCard.appendChild(seatPrice); 
     seatCard.appendChild(seatCardAction);
 
     seatCol.appendChild(seatCard);
@@ -254,7 +252,7 @@ var weatherIcon = function (id) {
   // List which icons to use
 
   var icon;
-  var thunderstorm = "<i class='bi bi-cloud-lightning-rain'></i>";
+  var thunderstorm = "<i class='material-icons'>ac_unit</i>";
   var drizzle = "<i class='bi bi-cloud-drizzle'></i>";
   var rain = "<i class='bi bi-cloud-rain'></i>";
   var snow = "<i class='bi bi-snow'></i>";
@@ -292,7 +290,10 @@ var weatherIcon = function (id) {
 // ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
   var temp = weather.main.temp + "\xB0 F";
-  var icon = weatherIcon(weather.weather[0].id);
+  // var icon = weatherIcon(weather.weather[0].id);
+  // var icon = document.createElement("i");
+  // icon.classList = "material-icons";
+  // icon.textContent = "ac_unit";
   weatherContainer.textContent = temp;
 };
 // ==================================================
@@ -329,7 +330,8 @@ function loadCity() {
 // =================Get Info From Form Input===========
 var eventFormHandler = function (event) {
   event.preventDefault();
-
+  document.getElementById("body").style.backgroundImage = "none";
+  document.getElementById("slider-instructions").classList = "blue-text text-darken-4"
   loader(tixEl);
   loader(seatEl);
 
@@ -343,6 +345,12 @@ var eventFormHandler = function (event) {
   }
 };
 // ==================================================
+
+// =================Refresh Page=================
+function refreshPage() {
+  var location = cityTitle.textContent;
+  getWeather(location);
+}
 
 // =============Modal Alert==================
 function modalInitialize(text) {
@@ -386,9 +394,14 @@ function loader(appendWhere) {
   appendWhere.appendChild(preloader);
 }
 // =======================================================
+if(document.getElementById("city-title").textContent){
+  document.getElementById("body").style.backgroundImage = "none";
+  document.getElementById("slider-instructions").classList = "blue-text text-darken-4"
+}
 
 loadCity();
 formEl.addEventListener("submit", eventFormHandler);
+refreshButton.addEventListener("click", refreshPage);
 modalClose.addEventListener("click", function () {
   modalAlert.close();
 });
