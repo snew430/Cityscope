@@ -15,13 +15,22 @@ h1{
 #city-title-parent{
     position: -webkit-sticky;
     position: sticky;
-
     top: 0;
-
     z-index: 999;
-    background-image: url("/assets/images/pexels-carlos-oliva-3586966.jpg");
+    background-image: url("../images/pexels-carlos-oliva-3586966.jpg");
     background-position-y: 58%;
     background-size: cover;
+    height: 10rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+}
+#slider-instructions{
+    font-size: 2rem;
+    text-align: center;
 }
 
 header div {

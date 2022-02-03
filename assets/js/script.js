@@ -12,6 +12,7 @@ var modalText = document.querySelector("#modal-text");
 var modalAlert = M.Modal.init(modalContainer);
 var modalClose = document.querySelector(".modal-close");
 var slider = document.querySelector("#test5");
+var refreshButton = document.querySelector("#refresh-button");
 
 let cityToSave = [];
 
@@ -213,8 +214,6 @@ var listSeat = function (data) {
     let seatCardImage = document.createElement("div");
     seatCardImage.classList = "card-image";
 
-    console.log(data.events[i].performers);
-
     // Get Card Image
     let seatImage = document.createElement("img");
     seatImage.setAttribute("src", data.events[i].performers[0].image);
@@ -238,10 +237,9 @@ var listSeat = function (data) {
     eventName.appendChild(eventNameP);
 
     // price
-    if(data.events[i].stats.lowest_price){
+    if (data.events[i].stats.lowest_price) {
       let seatPrice = document.createElement("p");
       seatPrice.textContent = data.events[i].stats.lowest_price;
-      console.log(seatPrice)
     }
     // Get link for event
     let seatCardAction = document.createElement("div");
@@ -270,7 +268,7 @@ var weatherIcon = function (id) {
   // List which icons to use
 
   var icon;
-  var thunderstorm = "<i class='bi bi-cloud-lightning-rain'></i>";
+  var thunderstorm = "<i class='material-icons'>ac_unit</i>";
   var drizzle = "<i class='bi bi-cloud-drizzle'></i>";
   var rain = "<i class='bi bi-cloud-rain'></i>";
   var snow = "<i class='bi bi-snow'></i>";
@@ -308,7 +306,10 @@ var weatherIcon = function (id) {
 // ===============DISPLAY WEATHER================
 var displayWeather = function (weather) {
   var temp = weather.main.temp + "\xB0 F";
-  var icon = weatherIcon(weather.weather[0].id);
+  // var icon = weatherIcon(weather.weather[0].id);
+  // var icon = document.createElement("i");
+  // icon.classList = "material-icons";
+  // icon.textContent = "ac_unit";
   weatherContainer.textContent = temp;
 };
 // ==================================================
@@ -360,6 +361,12 @@ var eventFormHandler = function (event) {
 };
 // ==================================================
 
+// =================Refresh Page=================
+function refreshPage() {
+  var location = cityTitle.textContent;
+  getWeather(location);
+}
+
 // =============Modal Alert==================
 function modalInitialize(text) {
   modalText.textContent = text;
@@ -405,6 +412,7 @@ function loader(appendWhere) {
 
 loadCity();
 formEl.addEventListener("submit", eventFormHandler);
+refreshButton.addEventListener("click", refreshPage);
 modalClose.addEventListener("click", function () {
   modalAlert.close();
 });
