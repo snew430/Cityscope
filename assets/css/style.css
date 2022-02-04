@@ -1,5 +1,10 @@
 body{
     background: lightgray;
+    background-image: url("../images/pexels-carlos-oliva-3586966.jpg");
+    background-size: cover;
+}
+#slider-instructions{
+    color: white;
 }
 h1{
     font-family: 'Abril Fatface', cursive;

@@ -102,23 +102,6 @@ function getSeat(location) {
   });
 }
 // ==================================================
-// ===========Get Pictures===========================
-// var axios = require('axios');
-
-// var config = {
-//   method: 'get',
-//   url: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=mongolian&inputtype=textquery&locationbias=circle%3A2000%4047.6918452%2C-122.2226413&fields=formatted_address%2Cname%2Crating%2Copening_hours%2Cgeometry&key=YOUR_API_KEY',
-//   headers: { }
-// };
-
-// axios(config)
-// .then(function (response) {
-//   console.log(JSON.stringify(response.data));
-// })
-// .catch(function (error) {
-//   console.log(error);
-// });
-
 // ==========List TicketMaster Events===========
 
 var listTix = function (data) {
@@ -236,11 +219,11 @@ var listSeat = function (data) {
     eventNameP.textContent = data.events[i].title;
     eventName.appendChild(eventNameP);
 
-    // price
-    if (data.events[i].stats.lowest_price) {
-      let seatPrice = document.createElement("p");
-      seatPrice.textContent = data.events[i].stats.lowest_price;
-    }
+    // // price
+    // if (data.events[i].stats.lowest_price) {
+    //   let seatPrice = document.createElement("p");
+    //   seatPrice.textContent = data.events[i].stats.lowest_price;
+    // }
     // Get link for event
     let seatCardAction = document.createElement("div");
     seatCardAction.classList = "card-action";
@@ -254,6 +237,7 @@ var listSeat = function (data) {
     // Append the card together
     seatCard.appendChild(seatCardImage);
     seatCard.appendChild(eventName);
+    // seatCard.appendChild(seatPrice); 
     seatCard.appendChild(seatCardAction);
 
     seatCol.appendChild(seatCard);
@@ -346,7 +330,8 @@ function loadCity() {
 // =================Get Info From Form Input===========
 var eventFormHandler = function (event) {
   event.preventDefault();
-
+  document.getElementById("body").style.backgroundImage = "none";
+  document.getElementById("slider-instructions").classList = "blue-text text-darken-4"
   loader(tixEl);
   loader(seatEl);
 
@@ -409,6 +394,10 @@ function loader(appendWhere) {
   appendWhere.appendChild(preloader);
 }
 // =======================================================
+if(document.getElementById("city-title").textContent){
+  document.getElementById("body").style.backgroundImage = "none";
+  document.getElementById("slider-instructions").classList = "blue-text text-darken-4"
+}
 
 loadCity();
 formEl.addEventListener("submit", eventFormHandler);
