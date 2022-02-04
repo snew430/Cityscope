@@ -8,14 +8,15 @@ Check out what is going on in your city today!  If you need something to do, see
 *HTML
 *CSS
 *JavaScript
+*Materialize CSS
 
 ## Link
 
-Coming Soon
+https://snew430.github.io/Cityscope/
 
 ## Screenshot
 
-Coming Soon
+![Screen Shot 2022-02-03 at 8 02 43 PM](https://user-images.githubusercontent.com/93355113/152455118-94986549-ea31-47fc-a5bf-c8b6230bdc9e.png)
 
 ## Contribution
 
