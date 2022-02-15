@@ -57,13 +57,13 @@ var getWeather = function (location) {
   fetch(weatherUrl).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
-        mainColumn.classList.remove("scale-in");
+        // mainColumn.classList.remove("scale-out");
         cityTitle.textContent = location.toUpperCase();
         displayWeather(data);
         getTix(location);
         getSeat(location);
         saveCity(location);
-        mainColumn.classList.add("scale-in");
+        // mainColumn.classList.add("scale-in");
       });
     } else {
       modalInitialize(
@@ -412,7 +412,9 @@ function loader(appendWhere) {
 
 loadCity();
 formEl.addEventListener("submit", eventFormHandler);
+
 refreshButton.addEventListener("click", refreshPage);
+
 modalClose.addEventListener("click", function () {
   modalAlert.close();
 });
