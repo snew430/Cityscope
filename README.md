@@ -12,7 +12,7 @@ Check out what is going on in your city today!  If you need something to do, see
 
 ## Link
 
-https://snew430.github.io/Cityscope/
+https://snew430.github.io/E-Vent/
 
 ## Screenshot
 
